@@ -12,8 +12,6 @@ void set_cidade(AEROPORTO a, char * s);
 void set_altitude(AEROPORTO a, int x);
 void set_aeroporto(void * a, char * line);
 
-int is_valid_aviao(AEROPORTO a);
-
 char * get_cod_IATA(void * a);
 char * get_nome(void * a);
 char * get_cidade(void * a);

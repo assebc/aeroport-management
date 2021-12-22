@@ -3,9 +3,6 @@
 #include <string.h>
 #include <ctype.h>
 
-#include "../hashtable.h"
-#include "../parser.h"
-
 struct ticket {
 
 	char * nome_passageiro;
@@ -100,11 +97,6 @@ void set_ticket(void * b, char * line){
 		i++;
 	}
 	free(os);
-}
-
-int is_valid_ticket(BILHETES b){
-	// to do
-	return 1;
 }
 
 char * get_nome_passageiro(void * b){

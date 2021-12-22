@@ -14,8 +14,6 @@ void set_velocidade_cruzeiro(AVIOES a, int x);
 void set_consumo_medio(AVIOES a, float x);
 void set_aviao(void * a, char * line);
 
-int is_valid_aviao(AVIOES a);
-
 char * get_cod_registo(void * a);
 char * get_marca(void * a);
 char * get_modelo(void * a);

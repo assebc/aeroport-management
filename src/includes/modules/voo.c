@@ -3,12 +3,9 @@
 #include <string.h>
 #include <ctype.h>
 
-#include "../hashtable.h"
-#include "../parser.h"
-
 struct voo {
 
-	int num_voo;
+	char*  num_voo;
 	char * data_partida;
 	char * data_chegada;
 	char * aeroport_partida;
@@ -40,8 +37,8 @@ void delete_voo(void * v){
 
 } 
 
-void set_num_voo(VOOS v, int x){
-	v->num_voo = x;
+void set_num_voo(VOOS v, char * s){
+	strcpy(v->num_voo,s);
 }
 
 void set_data_partida(VOOS v, char * s){
@@ -102,12 +99,7 @@ void set_voo(void * v, char * line){
 	free(os);
 }
 
-int is_valid_voo(VOOS v){
-	// to do
-	return 1;
-}
-
-int get_num_voo(void * v){
+char * get_num_voo(void * v){
 	VOOS vs = (VOOS) v;
 	return vs->num_voo;
 }
@@ -139,7 +131,7 @@ char * get_aviao_voo(void * v){
 
 void print_voo(void * v){
 	VOOS vs = (VOOS) v;
-	printf("num_voo:%d data_partida:%s data_chegada:%s aeroport_partida:%s aeroport_chegada:%s aviao_voo:%s\n", vs->num_voo, vs->data_partida, vs->data_chegada, vs->aeroport_partida, vs->aeroport_chegada, vs->aviao_voo);
+	printf("num_voo:%s data_partida:%s data_chegada:%s aeroport_partida:%s aeroport_chegada:%s aviao_voo:%s\n", vs->num_voo, vs->data_partida, vs->data_chegada, vs->aeroport_partida, vs->aeroport_chegada, vs->aviao_voo);
 }
 
 void copy_voo(void* dst, void* src){

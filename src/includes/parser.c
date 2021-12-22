@@ -1,31 +1,19 @@
-/**
- * @file parser.c
- * @brief Ficheiro que contém as funções auxiliares usadas ao longo do projeto
- */
-
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 #include <ctype.h>
 #include <time.h>
 
-/**
- * @brief Função sh
- *
- * Função que remove um caracter de uma string
- * 
- */
+#include "modules/avioes.h"
+#include "modules/aeroporto.h"
+#include "modules/voo.h"
+#include "modules/ticket.h"
+
 void sh (char *str){
 	char *p = str;
 	for (;*p; p++) *p = *(p+1);
 }
 
-/**
- * @brief Função is_valid_type
- *
- * Função que remove (/n ou /r/n) do final de uma string
- * 
- */
 void remove_possible_new_line(char line[]) {
 	int len = 0;
 	char *s = line;
@@ -37,13 +25,6 @@ void remove_possible_new_line(char line[]) {
 		sh(s-1);
 }
 
-/**
- * @brief Função remove_spaces
- *
- * Função que retira todos os espaços (' ') de uma dada string
- * 
- * @returns string sem espaços
- */
 char* remove_spaces(char *s) {
 	char *p = s;
 	while (*p)
@@ -54,3 +35,45 @@ char* remove_spaces(char *s) {
 	}
 	return s;
 }
+
+int is_valid_date(char *s){
+		int year, month, day, hour, minutes, seconds, matches;
+
+	matches = sscanf(s,"%4d-%2d-%2d %2d:%2d:%2d", &year, &month, &day, &hour, &minutes, &seconds);
+	if (matches == 6 && ((year == 2005 && month > 4) || (year == 2005 && month == 4 && day >=7) || year > 2005) && year <= 2021 && strlen(s) == 19)
+	{
+		if ((((month == 1 || month == 3 || month == 5 || month == 7 || month == 8 || month == 10 || month == 12) && day <= 31) || ((month == 4 || month == 6 || month == 9 || month == 11) && day <= 30) || (month == 2 && ((((year % 4 == 0 && year % 100 != 0) || year % 400 == 0) && day <= 29) || day <= 28))) && day > 0)
+		{
+			if (hour >= 0 && hour <= 23 && minutes >= 0 && minutes <= 59 && seconds >= 0 && seconds <= 59)
+				return 1;
+		}
+
+	}
+	return 0;
+}
+
+int is_valid_number(char *s){
+	char *p = s;
+	float x = atof(p);
+
+	if (x<=0) return 0;
+	else return 1;
+}
+
+// return em segundos
+int date_compare(char* date_1, char* date_2){
+
+	struct tm dtb_1 = {0}, dtb_2 = {0};
+	time_t dt_1, dt_2;
+
+	strptime(date_1, "%Y-%m-%d %H:%M:%S", &dtb_1);
+	strptime(date_2, "%Y-%m-%d %H:%M:%S", &dtb_2);
+
+	dt_1 = mktime(&dtb_1);
+	dt_2 = mktime(&dtb_2);
+
+	int r = difftime(dt_1, dt_2);
+	
+	return r;	
+}
+

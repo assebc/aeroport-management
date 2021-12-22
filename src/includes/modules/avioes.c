@@ -3,9 +3,6 @@
 #include <string.h>
 #include <ctype.h>
 
-#include "../hashtable.h"
-#include "../parser.h"
-
 struct avioes {
 
 	char * cod_registo;
@@ -100,11 +97,6 @@ void set_aviao(void * a, char * line){
 		i++;
 	}
 	free(os);
-}
-
-int is_valid_aviao(AVIOES a){
-	// to do
-	return 1;
 }
 
 char * get_cod_registo(void * a){

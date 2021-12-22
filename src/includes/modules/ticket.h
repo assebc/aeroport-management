@@ -14,8 +14,6 @@ void set_preco(BILHETES b, float x);
 void set_distancia(BILHETES b, float x);
 void set_ticket(void * b, char * line);
 
-int is_valid_ticket(BILHETES b);
-
 char * get_nome_passageiro(void * b);
 int get_nif(void * b);
 char * get_voo_ticket(void * b);

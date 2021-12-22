@@ -3,9 +3,6 @@
 #include <string.h>
 #include <ctype.h>
 
-#include "../hashtable.h"
-#include "../parser.h"
-
 struct aeroport {
 
 	char * cod_IATA;
@@ -82,10 +79,6 @@ void set_aeroporto(void * a, char * line){
 	free(os);
 }
 
-int is_valid_aeroporto(AEROPORTO a){
-	// to do
-	return 1;
-}
 
 char * get_cod_IATA(void * a){
 	AEROPORTO as = (AEROPORTO) a;

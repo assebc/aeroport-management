@@ -14,8 +14,6 @@ void set_aeroport_chegada(VOOS v, char * s);
 void set_aviao_voo(VOOS v, char * s);
 void set_voo(void * v, char * line);
 
-int is_valid_voo(VOOS v);
-
 int get_num_voo(void * v);
 char * get_data_partida(void * v);
 char * get_data_chegada(void * v);
