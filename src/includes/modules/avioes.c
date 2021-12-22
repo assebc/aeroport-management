@@ -12,7 +12,7 @@ struct avioes {
 	char * marca;
 	char * modelo;
 	int num_lugares;
-	int velocidade_cruzeiro;
+	float velocidade_cruzeiro;
 	float consumo_medio;
 
 };
@@ -56,7 +56,7 @@ void set_num_lugares(AVIOES a, int x){
 	a->num_lugares = x;
 }
 
-void set_velocidade_cruzeiro(AVIOES a, int x){
+void set_velocidade_cruzeiro(AVIOES a, float x){
 	a->velocidade_cruzeiro = x;
 }
 
@@ -90,7 +90,7 @@ void set_aviao(void * a, char * line){
 				break;
 
 			case 4:
-				set_velocidade_cruzeiro(as, atoi(p));
+				set_velocidade_cruzeiro(as, atof(p));
 				break;
 
 			case 5:
@@ -127,7 +127,7 @@ int get_num_lugares(void * a){
 	return as->num_lugares;
 }	
 
-int get_velocidade_cruzeiro(void * a){
+float get_velocidade_cruzeiro(void * a){
 	AVIOES as = (AVIOES) a;
 	return as->velocidade_cruzeiro;
 }
@@ -139,7 +139,7 @@ float get_consumo_medio(void * a){
 
 void print_aviao(void * a){
 	AVIOES as = (AVIOES) a;
-	printf("cod_registo:%s marca:%s modelo:%s num_lugares:%d velocidade_cruzeiro:%d consumo_medio:%.2f\n", as->cod_registo, as->marca, as->modelo, as->num_lugares, as->velocidade_cruzeiro, as->consumo_medio);
+	printf("cod_registo:%s marca:%s modelo:%s num_lugares:%d velocidade_cruzeiro:%.2f consumo_medio:%.2f\n", as->cod_registo, as->marca, as->modelo, as->num_lugares, as->velocidade_cruzeiro, as->consumo_medio);
 }
 
 void copy_aviao(void* dst, void* src){
