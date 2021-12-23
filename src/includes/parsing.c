@@ -4,44 +4,45 @@
 #include <ctype.h>
 #include <time.h>
 
+#define LINE_BUFFER 1024
+
 #include "modules/avioes.h"
 #include "modules/aeroporto.h"
 #include "modules/voo.h"
 #include "modules/ticket.h"
-
 
 #define PLANE "data/avioes.csv"
 #define AERO "data/aeroportos.csv"
 #define FLIGHT "data/voos.csv"
 #define TICKET "data/tickets.csv"
 
-#include "hashtable.h"
+#include "btree.h"
 #include "parser.h"
 
-int is_valid_plane(AVIOES a){
-
+int is_valid_plane(void * a){
+	AVIOES as = (AVIOES) a;
 	return 1;
 }
 
-int is_valid_aeroport(AEROPORTO a){
-
+int is_valid_aeroport(void * a){
+	AEROPORTO as = (AEROPORTO) a;
 	return 1;
 }
 
-int is_valid_flight(VOOS v){
-
+int is_valid_flight(void * v){
+	VOOS vs = (VOOS) v;
 	return 1;
 }
 
-int is_valid_ticket(BILHETES b){
-
+int is_valid_ticket(void * b){
+	BILHETES bs = (BILHETES) b;
 	return 1;
 }
 
 int cost(){
 
-	ht *ht = ht_create(TABLE_SIZE);
-
+	node ** tree = malloc(sizeof(node*));
+	
 	FILE * t = fopen(TICKET, "r");
 	//FILE * p = fopen(PLANE, "r");
 
@@ -57,8 +58,7 @@ int cost(){
 		valid_line = is_valid_ticket(b);
 
 		if(valid_line){
-			ht_insert(ht, get_num_voo(get_voo_ticket(b)), b);
-			ht->data += 1;
+			insert(,get_num_voo(get_voo_ticket(b)) );
 		}
 		delete_ticket(b);
 
@@ -69,7 +69,7 @@ int cost(){
 }
 
 int all_tickets_return(){
-
+	return 0;
 
 }
 
