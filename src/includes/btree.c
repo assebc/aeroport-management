@@ -1,65 +1,70 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <stdbool.h>
 
-struct btree {
-    int data;
-    int data2;
+typedef struct btree{
+    int value[2];
     struct btree * left;
-    struct btree * right;    
-};
+    struct btree * right;
+} btree;
 
-typedef struct btree node;
 
-void insert(node ** tree, int val){
-    
-    node *temp = NULL;
-    if(!(*tree))
-    {
-        temp = (node *)malloc(sizeof(node));
-        temp->left = temp->right = NULL;
-        temp->data = val;
-        temp->data2 = 0;
-        *tree = temp;
-        if (temp->data == val) temp->data2 += 1;
-        return;
+btree * create_node(int value){
+
+    btree * result = malloc(sizeof(btree));
+    if (result == NULL){
+        result->value[0] = value;
+        result->value[1] = 0;
+        result->left = NULL;
+        result->right = NULL;
     }
+    return result;
+}
 
-    if(val < (*tree)->data) insert(&(*tree)->left, val);
-    else if(val > (*tree)->data) insert(&(*tree)->right, val);
-    else insert(&(*tree), val);
+void insertID(btree ** rootptr, int val){
+
+    btree * root = *rootptr;
+
+    if (root == NULL) (*rootptr) = create_node(val);
+    else if (root->value[0] == val) root->value[0] = val;
+    else if (root->value[0] == 0) {
+        root->value[0] = val;
+        root->value[1] = 0;
+    } else if (root->value[0] > val) {
+        insertID(&(root->left),val);
+    } else if (root->value[0] < val){
+        insertID(&(root->right),val);
+    }
+}
+
+bool findID(btree * root, int value){
+
+    if (root == NULL) return false;
+    else if(root->value[0]==value) return true;
+    else if (value<root->value[0]) return findID(root->left,value);
+    else return findID(root->right,value);
 
 }
 
-void searchfor(int val, node ** tree){
-    
-    node ** temp = tree;
-    
-    while((*temp)->data!=val){
-         if ((*temp)->data<val) searchfor(val, &(*temp)->left);
-         else searchfor(val,&(*temp)->right);
-    }
+btree * id_wanted(btree * root, int value){
 
+    if(root == NULL) return NULL;
+    else if(root->value[0]==value) return root;
+    else if (value<root->value[0]) return id_wanted(root->left,value);
+    else return id_wanted(root->right,value);
 }
 
+int id_wanted2(btree * root, int value){
 
-void print_preorder(node * tree){
-  
-    if(tree)
-    {
-        printf("%d\n",tree->data);
-        print_preorder(tree->left);
-        print_preorder(tree->right);
-    }
-
+    if(root == NULL) return 0;
+    else if(root->value[0]==value) return root->value[1];
+    else if (value<root->value[0]) return id_wanted2(root->left,value);
+    else return id_wanted2(root->right,value);
 }
 
-int count_nodes(node *tree){
+void insert_person(btree * rootptr, int id_repo){
 
-    static int count = 0;
-    if(tree){
-        count_nodes(tree->left);
-        count++;
-        count_nodes(tree->right);
-    }
-    return count;
+    btree * root = rootptr;
+
+    if (id_wanted(root, id_repo) != NULL) root->value[1] = 1; 
 }

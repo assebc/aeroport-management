@@ -1,9 +1,12 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <stdbool.h>
 
-typedef struct btree node;
+typedef struct btree btree;
 
-void insert(node ** tree, int val);
-void searchfor(int val, node ** tree);
-void print_preorder(node * tree);
-int count_nodes(node *tree);
+btree * create_node(int value);
+void insertID(btree ** rootptr, int val);
+bool findID(btree * root, int value);
+btree * id_wanted(btree * root, int value);
+int id_wanted2(btree * root, int value);
+void insert_person(btree * rootptr, int id_repo);
