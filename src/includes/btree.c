@@ -3,9 +3,12 @@
 
 struct btree {
     int data;
+    int data2;
     struct btree * left;
     struct btree * right;    
 };
+
+typedef struct btree node;
 
 void insert(node ** tree, int val){
     
@@ -15,20 +18,29 @@ void insert(node ** tree, int val){
         temp = (node *)malloc(sizeof(node));
         temp->left = temp->right = NULL;
         temp->data = val;
+        temp->data2 = 0;
         *tree = temp;
+        if (temp->data == val) temp->data2 += 1;
         return;
     }
 
-    if(val < (*tree)->data)
-    {
-        insert(&(*tree)->left, val);
-    }
-    else if(val > (*tree)->data)
-    {
-        insert(&(*tree)->right, val);
+    if(val < (*tree)->data) insert(&(*tree)->left, val);
+    else if(val > (*tree)->data) insert(&(*tree)->right, val);
+    else insert(&(*tree), val);
+
+}
+
+void searchfor(int val, node ** tree){
+    
+    node ** temp = tree;
+    
+    while((*temp)->data!=val){
+         if ((*temp)->data<val) searchfor(val, &(*temp)->left);
+         else searchfor(val,&(*temp)->right);
     }
 
 }
+
 
 void print_preorder(node * tree){
   
