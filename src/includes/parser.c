@@ -2,6 +2,8 @@
 #include <stdlib.h>
 #include <string.h>
 #include <ctype.h>
+
+#define __USE_XOPEN
 #include <time.h>
 
 #include "modules/avioes.h"
@@ -61,7 +63,7 @@ int is_valid_number(char *s){
 }
 
 // return em segundos
-int date_compare(char* date_1, char* date_2){
+int date_compare(char* date_1, char* date_2) {
 
 	struct tm dtb_1 = {0}, dtb_2 = {0};
 	time_t dt_1, dt_2;
@@ -76,4 +78,3 @@ int date_compare(char* date_1, char* date_2){
 	
 	return r;	
 }
-
