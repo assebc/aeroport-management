@@ -6,6 +6,8 @@ int is_valid_aeroport(void * a);
 int is_valid_flight(void * v);
 int is_valid_ticket(void * b);
 
+node * btree_organizer()
+
 int pessoas_abordo(int num_voo, node * tree);
 float horas(int num_voo);
 float distancia(int num_voo);

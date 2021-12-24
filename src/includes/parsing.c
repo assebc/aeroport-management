@@ -65,6 +65,17 @@ int is_valid_ticket(void * b){
 		sum_costs += 5000;
 */
 
+node * btree_organizer(){
+
+	node * btree = malloc(sizeof(node*));
+	node * tmp = btree;
+
+	/*
+	*/
+
+	return btree;
+}
+
 int pessoas_abordo(int num_voo, node ** tree){
 
 	node ** tmp = tree;
