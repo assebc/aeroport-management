@@ -4,6 +4,7 @@
 
 typedef struct btree{
     int value[2];
+    char * profit;
     struct btree * left;
     struct btree * right;
 } btree;
@@ -15,6 +16,7 @@ btree * create_node(int value){
     if (result == NULL){
         result->value[0] = value;
         result->value[1] = 0;
+        result->profit = NULL;
         result->left = NULL;
         result->right = NULL;
     }
@@ -30,6 +32,7 @@ void insertID(btree ** rootptr, int val){
     else if (root->value[0] == 0) {
         root->value[0] = val;
         root->value[1] = 0;
+        root->profit = NULL;
     } else if (root->value[0] > val) {
         insertID(&(root->left),val);
     } else if (root->value[0] < val){
@@ -67,4 +70,88 @@ void insert_person(btree * rootptr, int id_repo){
     btree * root = rootptr;
 
     if (id_wanted(root, id_repo) != NULL) root->value[1] = 1; 
+}
+
+int conta_nodos(btree * root){
+
+    int accum = 0;
+    if(root){
+        accum++;
+        conta_nodos(root->left);
+        conta_nodos(root->right);
+    }
+
+    return accum;
+}
+
+int * create_list(int N){
+
+    int list[N];
+
+    for(int i=0;i<N;i++) list[i] = 0;
+
+    int * result = list;
+
+    return result;
+}
+
+int * addlist(int list[], int N, int x){
+
+    for(int i=0;i<N;i++){
+        if (list[i] == 0){
+            list[i] = x; 
+            break;
+        }
+    }
+
+    return list;
+}
+
+// Recursive Preorder
+int * preorder(btree *root, int list[]){
+    
+    if(root){
+        addlist(list, conta_nodos(root), root->value[0]);
+        preorder(root->left, list);
+        preorder(root->right, list);
+    }
+
+    return list;
+}
+
+void profit_insert_btree(btree * root, char * list_profit[], int i){
+    if(root){
+        root->profit = list_profit[i]; i++;
+        profit_insert_btree(root->left,list_profit,i);
+        profit_insert_btree(root->right,list_profit,i);
+    }
+
+}
+
+void profit_insert(btree * root, char * list_profit[]){
+
+    int i = 0;
+    profit_insert_btree(root,list_profit,i);
+
+}
+
+char * lookfor_profit(btree * root, int num_voo){
+
+    char * result = NULL;
+    btree * tmp = root;
+
+    tmp = id_wanted(tmp,num_voo);
+    result = tmp->profit;
+
+    return result;
+}
+
+void destroy_btree(btree * root){
+    root->left = NULL;
+    root->right = NULL;
+    root->value[0] = 0;
+    root->value[1] = 0;
+    root->profit = NULL;
+    root = NULL;
+    free(root);
 }

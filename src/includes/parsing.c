@@ -4,85 +4,64 @@
 #include <ctype.h>
 #include <time.h>
 
-#define LINE_BUFFER 1024
-
 #include "modules/avioes.h"
 #include "modules/aeroporto.h"
 #include "modules/voo.h"
 #include "modules/ticket.h"
+
+#include "btree.h"
+#include "parser.h"
+
+#define LINE_BUFFER 1024
 
 #define PLANE "data/avioes.csv"
 #define AERO "data/aeroportos.csv"
 #define FLIGHT "data/voos.csv"
 #define TICKET "data/tickets.csv"
 
-#include "btree.h"
-#include "parser.h"
-
 int is_valid_plane(void * a){
-	AVIOES as = (AVIOES) a;
+	//AVIOES as = (AVIOES) a;
 	return 1;
 }
 
 int is_valid_aeroport(void * a){
-	AEROPORTO as = (AEROPORTO) a;
+	//AEROPORTO as = (AEROPORTO) a;
 	return 1;
 }
 
 int is_valid_flight(void * v){
-	VOOS vs = (VOOS) v;
+	//VOOS vs = (VOOS) v;
 	return 1;
 }
 
 int is_valid_ticket(void * b){
-	BILHETES bs = (BILHETES) b;
+	//BILHETES bs = (BILHETES) b;
 	return 1;
 }
 
-/*
+btree * btree_organizer(){
 
-	node ** tree = malloc(sizeof(node*));
-	
-	FILE * t = fopen(TICKET, "r");
-	//FILE * p = fopen(PLANE, "r");
+	btree ** a = malloc(sizeof(btree*));
+	FILE * v = fopen(FLIGHT, "r");
+	char line[LINE_BUFFER];
 
-	char line[LINE_BUFFER], line_2[LINE_BUFFER];
-	int sum_costs, valid_line = 0, count_passageiro = 0;
-	float time = 0;
+	while(fgets(line,LINE_BUFFER,v)!=NULL){
+		VOOS v = create_voo();
+		set_voo(v,line);
+		insertID(a,get_num_voo(v));
+		delete_voo(v);
+	}
 
-	while (fgets(line, LINE_BUFFER, t) != NULL) {
-		remove_possible_new_line(line);
-
-		BILHETES b = create_ticket();
-		set_ticket(b,line);
-		valid_line = is_valid_ticket(b);
-
-		if(valid_line){
-			insert(tree, get_num_voo(get_voo_ticket(b)) );
-		}
-		delete_ticket(b);
-
-		sum_costs += 5000;
-*/
-
-node * btree_organizer(){
-
-	node * btree = malloc(sizeof(node*));
-	node * tmp = btree;
-
-	/*
-	*/
-
-	return btree;
+	return *a;
 }
 
-int pessoas_abordo(int num_voo, node ** tree){
+int pessoas_abordo(int num_voo, btree * tree){
 
-	node ** tmp = tree;
+	struct btree * tmp = tree;
 
-	searchfor(num_voo,tmp);
+	int value = id_wanted2(tmp, num_voo);
 
-	return ((*tmp)->data2);
+	return value;
 }
 
 float horas(int num_voo){
@@ -91,7 +70,7 @@ float horas(int num_voo){
 	char line[LINE_BUFFER];
 	float sec, horas;
 
-	while(fgets(line,1024,v)!=NULL){
+	while(fgets(line,LINE_BUFFER,v)!=NULL){
 		VOOS v = create_voo();
 		set_voo(v,line);
 		if(get_num_voo(v) == num_voo){
@@ -108,14 +87,13 @@ float horas(int num_voo){
 	return horas;
 }
 
-
 float distancia(int num_voo){
 
 	FILE * t = fopen(TICKET, "r");
 	char line[LINE_BUFFER];
 	float distancia;
 
-	while(fgets(line,1024,t)!=NULL){
+	while(fgets(line,LINE_BUFFER,t)!=NULL){
 		BILHETES b = create_ticket();
 		set_ticket(b,line);
 		if(get_num_voo(get_voo_ticket(b)) == num_voo){
@@ -146,22 +124,63 @@ float cost(int abordo, float horas, float milhas){
 
 float all_tickets_return(int num_voo){
 
+	FILE * t = fopen(TICKET, "r");
 	float tickets = 0;
-	/*
+	char line[LINE_BUFFER];
 
-	*/
+	while(fgets(line,LINE_BUFFER,t)!=NULL){
+		BILHETES b = create_ticket();
+		set_ticket(b,line);
+		if(get_num_voo(get_voo_ticket(b))==num_voo){
+			tickets += get_preco(b);
+			delete_ticket(b);
+		} else delete_ticket(b);
 
+	}
+
+	fclose(t);
+	
 	return tickets;
-
 }
 
-char * profit(node ** tree){
+btree * profit(){
 
-	node ** btree = tree;
+	btree * tmp = btree_organizer();
+	int N = conta_nodos(tmp);
+	int * list = create_list(N);
+	list = preorder(tmp, list);
+	char * list_profit[N];
+
+	for(int j = 0;j<N;j++){
+		list_profit[j] = NULL;
+	}
+
+	char * lucro = "lucro";
+	char * equilibrio = "equilibrio";
+	char * prejuizo = "prejuizo";
 
 	int num_voo;
+	for(int i = 0;i<N;i++){
+		num_voo = list[i];
+		if(all_tickets_return(num_voo) > cost(pessoas_abordo(num_voo, tmp), horas(num_voo), distancia(num_voo) ) ) list_profit[i] = lucro;
+		else if(all_tickets_return(num_voo) == cost(pessoas_abordo(num_voo, tmp), horas(num_voo), distancia(num_voo) ) ) list_profit[i] = equilibrio;
+		else list_profit[i] = prejuizo;
+	}
 
-	if(all_tickets_return(num_voo) > cost(pessoas_abordo(num_voo, btree), horas(num_voo), distancia(num_voo) ) ) return "lucro";
-	if(all_tickets_return(num_voo) == cost(pessoas_abordo(num_voo, btree), horas(num_voo), distancia(num_voo) ) ) return "equilibrio";
-	else return "prejuizo";
+	profit_insert(tmp,list_profit);
+
+	return tmp;
 }
+
+
+
+/*
+
+	funcionalidade 1 -> v-
+	funcionalidade 2 -> v
+	funcionalidade 3 -> v
+	funcionalidade 4 -> x
+	funcionalidade 5 -> x
+
+
+*/
