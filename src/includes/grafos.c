@@ -2,6 +2,8 @@
 #include <stdlib.h>
 #include <string.h>
 
+#include "parser.h"
+
 #include "modules/avioes.h"
 #include "modules/aeroporto.h"
 #include "modules/voo.h"
@@ -108,4 +110,27 @@ int directly_connected(char * partida, char * chegada){
 	if(matriz[p][c] == 1) r = 1;
 
 	return r;
+}
+
+float tempo_total_direto(char * partida, char * chegada){
+
+	float tempo = 0;
+
+	FILE * v = fopen(FLIGHT, "r");
+	char line[LINE_BUFFER];
+
+	while(fgets(line,LINE_BUFFER,v)!=NULL){
+		VOOS v = create_voo();
+		set_voo(v,line);
+		if((strcmp(get_aeroport_partida(v),partida)==0) && (strcmp(get_aeroport_chegada(v),chegada)==0)) {
+			tempo = date_compare(get_data_partida(v),get_data_chegada(v));
+			delete_voo(v);
+			break;
+		 } else delete_voo(v);
+
+	}
+	fclose(v);
+	tempo = tempo / 3600;
+
+	return tempo;
 }

@@ -11,6 +11,7 @@
 
 #include "btree.h"
 #include "parser.h"
+#include "grafos.h"
 
 #define LINE_BUFFER 1024
 
