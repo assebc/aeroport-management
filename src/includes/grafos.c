@@ -134,3 +134,25 @@ float tempo_total_direto(char * partida, char * chegada){
 
 	return tempo;
 }
+
+float preco_direto(char * partida, char * chegada){
+
+	float preco = 0;
+
+	FILE * t = fopen(TICKET, "r");
+	char line[LINE_BUFFER];
+
+	while(fgets(line,LINE_BUFFER,t)!=NULL){
+		BILHETES b = create_ticket();
+		set_ticket(b,line);
+		if( (strcmp(get_aeroport_partida(get_voo_ticket(b)), partida) == 0) && (strcmp(get_aeroport_chegada(get_voo_ticket(b)), chegada) == 0) ){
+			preco = get_preco(b);
+			delete_ticket(b);
+			break;
+		 } else delete_ticket(b);
+
+	}
+	fclose(t);
+
+	return preco;
+}
