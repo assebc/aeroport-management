@@ -16,6 +16,16 @@
 #define FLIGHT "data/voos.csv"
 #define TICKET "data/tickets.csv"
 
+struct tup{
+
+	float preco;
+	int num_voo;
+	float tempo;
+
+};
+
+typedef struct tup *TUPLE;
+
 // strongly connected components
 
 int aeroportos(){
@@ -135,24 +145,329 @@ float tempo_total_direto(char * partida, char * chegada){
 	return tempo;
 }
 
-float preco_direto(char * partida, char * chegada){
+TUPLE * preco_direto(char * partida, char * chegada){
 
-	float preco = 0;
-
+	TUPLE * res = malloc(sizeof(TUPLE));
 	FILE * t = fopen(TICKET, "r");
-	char line[LINE_BUFFER];
+	char line[LINE_BUFFER]; char * aux = NULL;
+	int i = 0;
 
 	while(fgets(line,LINE_BUFFER,t)!=NULL){
 		BILHETES b = create_ticket();
 		set_ticket(b,line);
-		if( (strcmp(get_aeroport_partida(get_voo_ticket(b)), partida) == 0) && (strcmp(get_aeroport_chegada(get_voo_ticket(b)), chegada) == 0) ){
-			preco = get_preco(b);
+		aux = get_voo_ticket(b);
+
+		VOOS vs = create_voo();
+		set_ticket(vs,aux);
+
+		if( (strcmp(get_aeroport_partida(vs), partida) == 0) && (strcmp(get_aeroport_chegada(vs), chegada) == 0) ){
+			res[i]->preco = get_preco(b);
+			res[i]->num_voo = get_num_voo(vs);
+			res[i]->tempo = date_compare(get_data_partida(vs),get_data_chegada(vs)) / 3600;
+			i++;
+			delete_voo(vs);
 			delete_ticket(b);
 			break;
-		 } else delete_ticket(b);
-
+		}
+		delete_voo(vs);
+		delete_ticket(b);
 	}
 	fclose(t);
 
-	return preco;
+	return res;
+}
+
+int count_direct_flights(TUPLE * t){
+
+	int num = 0;
+
+	while(t){
+		num++;
+	}
+
+	return num;
+}
+
+int cheap_direct(TUPLE * t, int N){
+
+	int min = 100000; // preço absurdo
+	for(int i=0;i<N;i++){
+		if(min>t[i]->preco) min = t[i]->preco;
+	}
+
+	return min;
+}
+
+int ** get_voos(char * aero_p, char * aero_c){
+
+	int limit_time = 72;
+	// arrays com arrays dos voos
+
+	
+}
+
+int ** get_voos_2(int ** voos){
+
+	int i = 0, j = 0;
+	int * voos_2[2];
+
+	while(voos){
+
+		if(get_len(voos[i]) == 2){
+			while(voos_2[j]){
+				*voos_2[0] = *voos[0];
+				*voos_2[1] = *voos[1];
+				j++;
+				break;
+			}
+		}
+
+		i++;
+	}
+
+	return voos_2;
+}
+
+char ** cheapest_2(int ** escala){
+
+	char ** escalas = NULL;
+	float aux_price = 1000000, aux_1, aux_2, atm_price;
+
+	while(escala){
+
+		aux_1 = get_preco_num_voo(*escala[0]);
+		aux_2 = get_preco_num_voo(*escala[1]);
+		atm_price = aux_1 + aux_2
+		if(atm_price<aux_price){
+			char * voo_1 = get_voo_num_voo(*escala[0]);
+			char * voo_2 = get_voo_num_voo(*escala[1]);
+			strcpy(escalas[0],voo_1);
+			strcpy(escalas[1],voo_2);
+			aux_1 = 0; aux_2 = 0, atm_price = 0;
+		}
+		
+	}
+
+	return escalas;
+}
+
+float precos_2(char * f1, char * f2){
+
+	// preco dos 2 voos
+}
+
+int ** get_voos_3(int ** voos){
+
+	int i = 0, j = 0;
+	int * voos_3[3];
+
+	while(voos){
+
+		if(get_len(voos[i]) == 3){
+			while(voos_3[j]){
+				*voos_3[0] = *voos[0];
+				*voos_3[1] = *voos[1];
+				*voos_3[2] = *voos[2];
+				j++;
+				break;
+			}
+		}
+
+		i++;
+	}
+
+	return voos_3;
+
+}
+char ** cheapest_3(int ** escala){
+
+	char ** escalas = NULL;
+	int aux_price = 1000000, aux_1, aux_2, aux_3, atm_price;
+
+	while(escala){
+
+		aux_1 = get_preco_num_voo(*escala[0]);
+		aux_2 = get_preco_num_voo(*escala[1]);
+		aux_3 = get_preco_num_voo(*escala[2]);
+		atm_price = aux_1 + aux_2 + aux_3
+		if(atm_price<aux_price){
+			char * voo_1 = get_voo_num_voo(*escala[0]);
+			char * voo_2 = get_voo_num_voo(*escala[1]);
+			char * voo_3 = get_voo_num_voo(*escala[2]);
+			strcpy(escalas[0],voo_1);
+			strcpy(escalas[1],voo_2);
+			strcpy(escalas[2],voo_3);
+			aux_1 = 0; aux_2 = 0; aux_3 = 0; atm_price = 0;
+		}
+		
+	}
+
+	return escalas;
+}
+
+float precos_3(char * f1, char * f2, char * f3){
+
+	// preco dos 3 voos
+}
+
+int ** get_voos_4(int ** voos){
+
+	int i = 0, j = 0;
+	int * voos_4[4];
+
+	while(voos){
+
+		if(get_len(voos[i]) == 4){
+			while(voos_3[j]){
+				*voos_4[0] = *voos[0];
+				*voos_4[1] = *voos[1];
+				*voos_4[2] = *voos[2];
+				*voos_4[3] = *voos[3];
+				j++;
+				break;
+			}
+		}
+
+		i++;
+	}
+
+	return voos_4;
+}
+char ** cheapest_4(int ** escala){
+
+	char ** escalas = NULL;
+	int aux_price = 1000000, aux_1, aux_2, aux_3, aux_4, atm_price;
+
+	while(escala){
+
+		aux_1 = get_preco_num_voo(*escala[0]);
+		aux_2 = get_preco_num_voo(*escala[1]);
+		aux_3 = get_preco_num_voo(*escala[2]);
+		aux_4 = get_preco_num_voo(*escala[3]);
+		atm_price = aux_1 + aux_2 + aux_3 + aux_4
+		if(atm_price<aux_price){
+			char * voo_1 = get_voo_num_voo(*escala[0]);
+			char * voo_2 = get_voo_num_voo(*escala[1]);
+			char * voo_3 = get_voo_num_voo(*escala[2]);
+			char * voo_4 = get_voo_num_voo(*escala[3]);
+			strcpy(escalas[0],voo_1);
+			strcpy(escalas[1],voo_2);
+			strcpy(escalas[2],voo_3);
+			strcpy(escalas[3],voo_4);
+			aux_1 = 0; aux_2 = 0; aux_3 = 0; aux_4 = 0; atm_price = 0;
+		}
+		
+	}
+
+	return escalas;
+}
+
+float precos_4(char * f1, char * f2, char * f3, char * f4){
+
+	// preco dos 4 voos
+}
+
+char * get_choices(char * aero_p, char *  aero_c, int opt){
+
+	FILE * v = fopen(FLIGHT, "r");
+	char line[LINE_BUFFER]; char def_line[LINE_BUFFER]; char * flight = NULL;
+	int ** escalas_2; int ** escalas_3; int ** escalas_4;
+	TUPLE * tup = malloc(sizeof(TUPLE));
+	int direct_cheap, i = 0, min = 72, atm_voo;
+	float preco_def = 0, preco_min;
+
+	/*
+		opt = 0 -> mais barato
+		opt = 1 -> mais rápido (direto)
+		opt = 2 -> 2 escalas
+		opt = 3 -> 3 escalas
+		opt = 4 -> 4 escalas
+	*/
+
+	tup = preco_direto(aero_p, aero_c);
+	TUPLE * tmp = tup;
+	direct_cheap = cheap_direct(tup,count_direct_flights(tup));
+
+	// menor voo
+	while(tup){
+		if(min>tup[i]->tempo){
+			min = tup[i]->tempo;
+			atm_voo = tup[i]->num_voo;
+			i++;
+		}
+	}
+
+	escalas_2 = get_voos_2(get_voos(aero_p,aero_c));
+	char ** barato_2 = cheapest_2(escalas_2);
+	float preco_2 = precos_2(barato_2);
+
+	escalas_3 = get_voos_3(get_voos(aero_p,aero_c));
+	char ** barato_3 = cheapest_3(escalas_3);
+	float preco_3 = precos_3(barato_3[0],barato_3[1],barato_3[2]);
+
+	escalas_4 = get_voos_4(get_voos(aero_p,aero_c));
+	char ** barato_4 = cheapest_4(escalas_4);
+	float preco_4 = precos_4(barato_4[0],barato_4[1],barato_4[2],barato_4[3]);
+
+	while(fgets(line,LINE_BUFFER,v)!=NULL){
+		VOOS vs = create_voo();
+		set_voo(vs,line);
+
+		VOOS vtmp = create_voo();
+		
+		switch(opt){
+
+			case 0: // mais barato
+				if(get_num_voo(vs) == direct_cheap) {  // por default o voo mais barato é o mais barato direto
+					set_voo(vtmp,line);
+					strcpy(def_line,line);
+					preco_def = get_preco(vtmp);
+					delete_voo(vtmp);
+				}
+				if(preco_def != 0) preco_min = mais_barato(preco_def, preco_2, preco_3, preco_4);
+
+				switch(preco_min){
+
+					case preco_def:
+						strcpy(flight,def_line);
+						break;
+
+					case preco_2:
+						strcpy(flight,barato_2);
+						break;
+
+					case preco_3:
+						strcpy(flight,barato_3);
+						break;
+
+					case preco_4:
+						strcpy(flight,barato_4);
+						break;
+				}
+
+				break;
+
+			case 1: // mais rápido
+				if(get_num_voo(vs)==atm_voo) strcpy(flight,line);
+				break;
+
+			case 2: // melhor com 2 escalas (o mais barato)
+				strcpy(flight,barato_2);
+				break;
+
+			case 3: // melhor com 3 escalas (o mais barato)
+				strcpy(flight,barato_3);
+				break;
+
+			case 4: // melhor com 4 escalas (o mais barato)
+				strcpy(flight,barato_4);
+				break;
+
+		}
+		delete_voo(vs);
+	}
+	fclose(v);
+
+	return flight;
+
 }
