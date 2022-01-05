@@ -13,6 +13,7 @@ struct aeroport {
 };
 
 typedef struct aeroport *AEROPORTO;
+#define AERO "data/aeroportos.csv"
 
 void * create_aeroporto(){
 

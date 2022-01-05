@@ -2,6 +2,7 @@
 #define AVIOES_H
 
 typedef struct avioes *AVIOES;
+#define PLANE "data/avioes.csv"
 
 void * create_aviao();
 void delete_aviao(void * a);

@@ -15,6 +15,7 @@ struct avioes {
 };
 
 typedef struct avioes *AVIOES;
+#define PLANE "data/avioes.csv"
 
 void * create_aviao(){
 

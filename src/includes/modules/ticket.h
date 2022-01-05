@@ -2,6 +2,7 @@
 #define TICKET_H
 
 typedef struct ticket *BILHETES;
+#define TICKET "data/tickets.csv"
 
 void * create_ticket();
 void delete_ticket(void * b);
@@ -20,6 +21,7 @@ char * get_voo_ticket(void * b);
 char * get_lugar(void * b);
 float get_preco(void * b);
 float get_distancia(void * b);
+float get_preco_num_voo(int num_voo);
 
 void print_ticket(void * b);
 void copy_ticket(void* dst, void* src);

@@ -3,6 +3,8 @@
 #include <string.h>
 #include <ctype.h>
 
+#include "aeroporto.h"
+
 struct voo {
 
 	int num_voo;
@@ -15,6 +17,8 @@ struct voo {
 };
 
 typedef struct voo *VOOS;
+#define FLIGHT "data/voos.csv"
+#define LINE_BUFFER 1024
 
 void * create_voo(){
 
@@ -127,6 +131,26 @@ char * get_aeroport_chegada(void * v){
 char * get_aviao_voo(void * v){
 	VOOS vs = (VOOS) v;
 	return vs->aviao_voo;
+}
+
+char * get_voo_num_voo(int num_voo){
+
+	FILE * f = fopen(FLIGHT, "r");
+	char line[LINE_BUFFER]; char * voo = NULL;
+
+	while(fgets(line,LINE_BUFFER,f)!=NULL){
+		VOOS vs = create_voo();
+		set_voo(vs,line);
+		if(get_num_voo(vs)==num_voo){
+			strcpy(voo,line);
+			delete_voo(vs);
+			break;
+		}
+		delete_voo(vs);	
+	}
+	fclose(f);
+
+	return voo;	
 }
 
 void print_voo(void * v){

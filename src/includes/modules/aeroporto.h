@@ -2,6 +2,7 @@
 #define AEROPORTO_H
 
 typedef struct aeroport *AEROPORTO;
+#define AERO "data/aeroportos.csv"
 
 void * create_aeroporto();
 void delete_aeroporto(void * a);

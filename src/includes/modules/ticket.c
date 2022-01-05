@@ -3,6 +3,8 @@
 #include <string.h>
 #include <ctype.h>
 
+#include "voo.h"
+
 struct ticket {
 
 	char * nome_passageiro;
@@ -15,6 +17,8 @@ struct ticket {
 };
 
 typedef struct ticket *BILHETES;
+#define TICKET "data/tickets.csv"
+#define LINE_BUFFER 1024
 
 void * create_ticket(){
 
@@ -127,6 +131,33 @@ float  get_preco(void * b){
 float get_distancia(void * b){
 	BILHETES bs = (BILHETES) b;
 	return bs->distancia;
+}
+
+float get_preco_num_voo(int num_voo){
+
+	FILE * t = fopen(TICKET, "r");
+	char line[LINE_BUFFER]; char * aux = NULL;
+	float preco;
+
+	while(fgets(line,LINE_BUFFER,v)!=NULL){
+		BILHETES bs = create_ticket();
+		set_ticket(bs,line);
+		aux = get_voo_ticket(bs);
+
+		VOOS vs = create_voo();
+		set_voo(vs,aux);
+
+		if (get_num_voo(vs) == num_voo) {
+			preco = get_preco(bs);
+			delete_voo(vs);
+			delete_ticket(bs);
+			break;
+		}
+		delete_voo(vs);
+		delete_ticket(bs);
+	}
+	fclose(v);
+	return preco;
 }
 
 void print_ticket(void * b){

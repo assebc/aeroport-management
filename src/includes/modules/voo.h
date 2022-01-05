@@ -2,6 +2,7 @@
 #define VOO_H
 
 typedef struct voo *VOOS;
+#define FLIGHT "data/voos.csv"
 
 void * create_voo();
 void delete_voo(void * v);
@@ -20,6 +21,7 @@ char * get_data_chegada(void * v);
 char * get_aeroport_partida(void * v);
 char * get_aeroport_chegada(void * v);
 char * get_aviao_voo(void * v);
+char * get_voo_num_voo(int num_voo);
 
 void print_voo(void * v);
 void copy_voo(void* dst, void* src);
