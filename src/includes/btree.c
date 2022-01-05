@@ -69,7 +69,7 @@ void insert_person(btree * rootptr, int id_repo){
 
     btree * root = rootptr;
 
-    if (id_wanted(root, id_repo) != NULL) root->value[1] = 1; 
+    if (id_wanted(root, id_repo) != NULL) root->value[1] += 1; 
 }
 
 int conta_nodos(btree * root){

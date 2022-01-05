@@ -63,7 +63,7 @@ int is_valid_number(char *s){
 }
 
 // return em segundos
-int date_compare(char* date_1, char* date_2) {
+int date_compare(char * date_1, char * date_2) {
 
 	struct tm dtb_1 = {0}, dtb_2 = {0};
 	time_t dt_1, dt_2;
@@ -77,4 +77,23 @@ int date_compare(char* date_1, char* date_2) {
 	int r = difftime(dt_1, dt_2);
 	
 	return r;	
+}
+
+// date_1 é depois de date_2
+int date_compare_bool(char * date_1, char * date_2){
+
+	struct tm dtb_1 = {0}, dtb_2 = {0};
+	time_t dt_1, dt_2;
+	int res = 1;
+
+	strptime(date_1, "%Y-%m-%d %H:%M:%S", &dtb_1);
+	strptime(date_2, "%Y-%m-%d %H:%M:%S", &dtb_2);
+
+	dt_1 = mktime(&dtb_1);
+	dt_2 = mktime(&dtb_2);
+
+	int r = difftime(dt_1, dt_2);
+	if (r < 0) res = 0;
+
+	return res;
 }

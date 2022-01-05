@@ -97,7 +97,7 @@ float distancia(int num_voo){
 	while(fgets(line,LINE_BUFFER,t)!=NULL){
 		BILHETES b = create_ticket();
 		set_ticket(b,line);
-		if(get_num_voo(get_voo_ticket(b)) == num_voo){
+		if(get_num_voo(get_voo_ticket(b)) == num_voo){ // fix me pls
 			distancia = get_distancia(b);
 			delete_ticket(b);
 			break;
@@ -132,7 +132,7 @@ float all_tickets_return(int num_voo){
 	while(fgets(line,LINE_BUFFER,t)!=NULL){
 		BILHETES b = create_ticket();
 		set_ticket(b,line);
-		if(get_num_voo(get_voo_ticket(b))==num_voo){
+		if(get_num_voo(get_voo_ticket(b))==num_voo){ // fix me pls
 			tickets += get_preco(b);
 			delete_ticket(b);
 		} else delete_ticket(b);
@@ -142,6 +142,95 @@ float all_tickets_return(int num_voo){
 	fclose(t);
 	
 	return tickets;
+}
+
+int another_num_voo(int num_voo, btree * vs){
+	
+	FILE * f = fopen(FLIGHT, "r");
+	char line[LINE_BUFFER]; char * aux = NULL;
+	int num_voo_option = 0, num_lugares, max_on_flight;
+	char * aero_p = NULL; char * aero_c = NULL; char * data_p = NULL;
+	btree * tmp = vs;
+
+	while(fgets(line,LINE_BUFFER,f)!=NULL){
+		VOOS v = create_voo();
+		set_voo(v,line);
+		if (get_num_voo(v) == num_voo){
+
+			// create capsule to search num_lugares
+			aux = get_aviao_voo(v);
+			AVIOES a = create_aviao();
+			set_aviao(a, aux);
+			num_lugares = get_num_lugares(a);
+			delete_aviao(a);
+			// close capsule
+
+			if( num_lugares > id_wanted2(tmp,get_num_voo(v)) ) return num_voo; // verifica se voo está cheio
+
+			aero_p = get_aeroport_partida(v);
+			aero_c = get_aeroport_chegada(v);
+			data_p = get_data_partida(v);
+			
+		} 
+		delete_voo(v);
+	}
+
+	while(fgets(line,LINE_BUFFER,f)!=NULL){
+		VOOS v = create_voo();
+		set_voo(v,line);
+		int atm_num_voo = get_num_voo(v);
+		int flight_occupation = id_wanted2(tmp,atm_num_voo);
+		if( (atm_num_voo != num_voo) && (strcmp(get_aeroport_partida(v),aero_p)==0) && (strcmp(get_aeroport_chegada(v),aero_c)==0) && date_compare_bool(get_data_partida(v),data_p)){
+			AVIOES as = create_aviao();
+			set_aviao(as,get_aviao_voo(v));
+			max_on_flight = get_num_lugares(as);
+			if(flight_occupation < max_on_flight){
+				num_voo_option = atm_num_voo;
+				return num_voo_option;
+			}
+			delete_aviao(as);
+		}
+		delete_voo(v);
+	}
+	fclose(f);
+
+	return num_voo_option;
+}
+
+void verify_ticket(btree * p){
+
+	FILE * t = fopen(TICKET, "r");
+	FILE * vf = fopen(FLIGHT, "r");
+	char line[LINE_BUFFER]; char line_2[LINE_BUFFER];char * voo_updt = NULL; char * voo = NULL;
+
+	while(fgets(line,LINE_BUFFER,t)!=NULL){
+		BILHETES b = create_ticket();
+		set_ticket(b,line);
+		voo = get_voo_ticket(b);
+
+		// create capsule to search num_lugares
+		VOOS v = create_voo();
+		set_voo(v,voo);
+		int n_voo = get_num_voo(v);
+		int num_voo = another_num_voo(n_voo,p);
+		delete_voo(v);
+		// close capsule
+
+		while(fgets(line_2,LINE_BUFFER,vf)!=NULL){
+			VOOS vs = create_voo();
+			set_voo(vs,line_2);
+			if (num_voo == get_num_voo(vs)){
+				strcpy(voo_updt,line_2);
+				break;
+			}
+			delete_voo(vs);
+		}
+
+		fclose(vf);
+		set_voo_ticket(b,voo_updt);
+		delete_ticket(b);
+	}
+	fclose(t);
 }
 
 btree * profit(){
@@ -174,14 +263,3 @@ btree * profit(){
 }
 
 
-
-/*
-
-	funcionalidade 1 -> v-
-	funcionalidade 2 -> v
-	funcionalidade 3 -> v
-	funcionalidade 4 -> x
-	funcionalidade 5 -> x
-
-
-*/
