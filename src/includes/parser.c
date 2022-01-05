@@ -97,3 +97,13 @@ int date_compare_bool(char * date_1, char * date_2){
 
 	return res;
 }
+
+int get_len(int a[]){
+
+	int i = 0;
+
+	while(a){
+		a++;
+	}
+	return a;
+}

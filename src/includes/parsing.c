@@ -15,31 +15,6 @@
 
 #define LINE_BUFFER 1024
 
-#define PLANE "data/avioes.csv"
-#define AERO "data/aeroportos.csv"
-#define FLIGHT "data/voos.csv"
-#define TICKET "data/tickets.csv"
-
-int is_valid_plane(void * a){
-	//AVIOES as = (AVIOES) a;
-	return 1;
-}
-
-int is_valid_aeroport(void * a){
-	//AEROPORTO as = (AEROPORTO) a;
-	return 1;
-}
-
-int is_valid_flight(void * v){
-	//VOOS vs = (VOOS) v;
-	return 1;
-}
-
-int is_valid_ticket(void * b){
-	//BILHETES bs = (BILHETES) b;
-	return 1;
-}
-
 btree * btree_organizer(){
 
 	btree ** a = malloc(sizeof(btree*));
@@ -91,18 +66,25 @@ float horas(int num_voo){
 float distancia(int num_voo){
 
 	FILE * t = fopen(TICKET, "r");
-	char line[LINE_BUFFER];
+	char line[LINE_BUFFER]; char * aux = NULL;
 	float distancia;
 
 	while(fgets(line,LINE_BUFFER,t)!=NULL){
 		BILHETES b = create_ticket();
 		set_ticket(b,line);
-		if(get_num_voo(get_voo_ticket(b)) == num_voo){ // fix me pls
+		aux = get_voo_ticket(b);
+		VOOS v = create_voo();
+		set_voo(v,aux);
+		if(get_num_voo(v) == num_voo){
 			distancia = get_distancia(b);
+			delete_voo(v);
 			delete_ticket(b);
 			break;
 		}
-		else delete_ticket(b);
+
+		delete_voo(v);
+		delete_ticket(b);
+
 	}
 	fclose(t);
 
@@ -127,16 +109,19 @@ float all_tickets_return(int num_voo){
 
 	FILE * t = fopen(TICKET, "r");
 	float tickets = 0;
-	char line[LINE_BUFFER];
+	char line[LINE_BUFFER]; char * aux = NULL;
 
 	while(fgets(line,LINE_BUFFER,t)!=NULL){
 		BILHETES b = create_ticket();
 		set_ticket(b,line);
-		if(get_num_voo(get_voo_ticket(b))==num_voo){ // fix me pls
-			tickets += get_preco(b);
-			delete_ticket(b);
-		} else delete_ticket(b);
-
+		aux = get_voo_ticket(b);
+		VOOS v = create_voo();
+		set_voo(v,aux);
+		if(get_num_voo(v)==num_voo){
+			tickets += get_preco(b);		
+		}
+		delete_voo(v);
+		delete_ticket(b);
 	}
 
 	fclose(t);
