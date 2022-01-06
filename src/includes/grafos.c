@@ -198,7 +198,7 @@ int cheap_direct(TUPLE * t, int N){
 	return min;
 }
 
-int ** get_voos(char * aero_p, char * aero_c){
+int *** get_voos(char * aero_p, char * aero_c){
 
 	int limit_time = 72;
 	// arrays com arrays dos voos
@@ -206,17 +206,17 @@ int ** get_voos(char * aero_p, char * aero_c){
 	
 }
 
-int ** get_voos_2(int ** voos){
+int *** get_voos_2(int *** voos){
 
 	int i = 0, j = 0;
-	int * voos_2[2];
+	int *** voos_2 = malloc(sizeof (char*)* sizeof(char*) * 200);
 
 	while(voos){
 
-		if(get_len(voos[i]) == 2){
-			while(voos_2[j]){
-				*voos_2[0] = *voos[0];
-				*voos_2[1] = *voos[1];
+		if(get_len(*voos[i]) == 2){
+			while(*voos_2[j]){
+				**voos_2[0] = **voos[0];
+				**voos_2[1] = **voos[1];
 				j++;
 				break;
 			}
@@ -228,19 +228,19 @@ int ** get_voos_2(int ** voos){
 	return voos_2;
 }
 
-char ** cheapest_2(int ** escala){
+char ** cheapest_2(int *** escala){
 
 	char ** escalas = NULL;
 	float aux_price = 1000000, aux_1, aux_2, atm_price;
 
 	while(escala){
 
-		aux_1 = get_preco_num_voo(*escala[0]);
-		aux_2 = get_preco_num_voo(*escala[1]);
-		atm_price = aux_1 + aux_2
+		aux_1 = get_preco_num_voo(**escala[0]);
+		aux_2 = get_preco_num_voo(**escala[1]);
+		atm_price = aux_1 + aux_2;
 		if(atm_price<aux_price){
-			char * voo_1 = get_voo_num_voo(*escala[0]);
-			char * voo_2 = get_voo_num_voo(*escala[1]);
+			char * voo_1 = get_voo_num_voo(**escala[0]);
+			char * voo_2 = get_voo_num_voo(**escala[1]);
 			strcpy(escalas[0],voo_1);
 			strcpy(escalas[1],voo_2);
 			aux_1 = 0; aux_2 = 0, atm_price = 0;
@@ -253,18 +253,28 @@ char ** cheapest_2(int ** escala){
 
 float precos_2(char * f1, char * f2){
 
-	// preco dos 2 voos
+	int preco = 0;
+	VOOS v = create_voo();
+	VOOS vs = create_voo();
+	set_voo(v,f1);
+	set_voo(vs,f2);
+	preco += get_preco_num_voo(get_num_voo(v));
+	preco += get_preco_num_voo(get_num_voo(vs));
+	delete_voo(v);
+	delete_voo(vs);
+
+	return preco;
 }
 
-int ** get_voos_3(int ** voos){
+int *** get_voos_3(int *** voos){
 
 	int i = 0, j = 0;
-	int * voos_3[3];
+	int *** voos_3 =  malloc(sizeof (char*)* sizeof(char*) * 300);
 
 	while(voos){
 
-		if(get_len(voos[i]) == 3){
-			while(voos_3[j]){
+		if(get_len(*voos[i]) == 3){
+			while(*voos_3[j]){
 				*voos_3[0] = *voos[0];
 				*voos_3[1] = *voos[1];
 				*voos_3[2] = *voos[2];
@@ -279,21 +289,21 @@ int ** get_voos_3(int ** voos){
 	return voos_3;
 
 }
-char ** cheapest_3(int ** escala){
+char ** cheapest_3(int *** escala){
 
 	char ** escalas = NULL;
 	int aux_price = 1000000, aux_1, aux_2, aux_3, atm_price;
 
 	while(escala){
 
-		aux_1 = get_preco_num_voo(*escala[0]);
-		aux_2 = get_preco_num_voo(*escala[1]);
-		aux_3 = get_preco_num_voo(*escala[2]);
-		atm_price = aux_1 + aux_2 + aux_3
+		aux_1 = get_preco_num_voo(**escala[0]);
+		aux_2 = get_preco_num_voo(**escala[1]);
+		aux_3 = get_preco_num_voo(**escala[2]);
+		atm_price = aux_1 + aux_2 + aux_3;
 		if(atm_price<aux_price){
-			char * voo_1 = get_voo_num_voo(*escala[0]);
-			char * voo_2 = get_voo_num_voo(*escala[1]);
-			char * voo_3 = get_voo_num_voo(*escala[2]);
+			char * voo_1 = get_voo_num_voo(**escala[0]);
+			char * voo_2 = get_voo_num_voo(**escala[1]);
+			char * voo_3 = get_voo_num_voo(**escala[2]);
 			strcpy(escalas[0],voo_1);
 			strcpy(escalas[1],voo_2);
 			strcpy(escalas[2],voo_3);
@@ -307,22 +317,36 @@ char ** cheapest_3(int ** escala){
 
 float precos_3(char * f1, char * f2, char * f3){
 
-	// preco dos 3 voos
+	int preco = 0;
+	VOOS v = create_voo();
+	VOOS vs = create_voo();
+	VOOS vss = create_voo();
+	set_voo(v,f1);
+	set_voo(vs,f2);
+	set_voo(vss,f3);
+	preco += get_preco_num_voo(get_num_voo(v));
+	preco += get_preco_num_voo(get_num_voo(vs));
+	preco += get_preco_num_voo(get_num_voo(vss));
+	delete_voo(v);
+	delete_voo(vs);
+	delete_voo(vss);
+
+	return preco;
 }
 
-int ** get_voos_4(int ** voos){
+int *** get_voos_4(int *** voos){
 
 	int i = 0, j = 0;
-	int * voos_4[4];
+	int *** voos_4 =  malloc(sizeof (char*)* sizeof(char*) * 400);
 
 	while(voos){
 
-		if(get_len(voos[i]) == 4){
-			while(voos_3[j]){
-				*voos_4[0] = *voos[0];
-				*voos_4[1] = *voos[1];
-				*voos_4[2] = *voos[2];
-				*voos_4[3] = *voos[3];
+		if(get_len(*voos[i]) == 4){
+			while(*voos_4[j]){
+				**voos_4[0] = **voos[0];
+				**voos_4[1] = **voos[1];
+				**voos_4[2] = **voos[2];
+				**voos_4[3] = **voos[3];
 				j++;
 				break;
 			}
@@ -333,23 +357,23 @@ int ** get_voos_4(int ** voos){
 
 	return voos_4;
 }
-char ** cheapest_4(int ** escala){
+char ** cheapest_4(int *** escala){
 
 	char ** escalas = NULL;
 	int aux_price = 1000000, aux_1, aux_2, aux_3, aux_4, atm_price;
 
 	while(escala){
 
-		aux_1 = get_preco_num_voo(*escala[0]);
-		aux_2 = get_preco_num_voo(*escala[1]);
-		aux_3 = get_preco_num_voo(*escala[2]);
-		aux_4 = get_preco_num_voo(*escala[3]);
-		atm_price = aux_1 + aux_2 + aux_3 + aux_4
+		aux_1 = get_preco_num_voo(**escala[0]);
+		aux_2 = get_preco_num_voo(**escala[1]);
+		aux_3 = get_preco_num_voo(**escala[2]);
+		aux_4 = get_preco_num_voo(**escala[3]);
+		atm_price = aux_1 + aux_2 + aux_3 + aux_4;
 		if(atm_price<aux_price){
-			char * voo_1 = get_voo_num_voo(*escala[0]);
-			char * voo_2 = get_voo_num_voo(*escala[1]);
-			char * voo_3 = get_voo_num_voo(*escala[2]);
-			char * voo_4 = get_voo_num_voo(*escala[3]);
+			char * voo_1 = get_voo_num_voo(**escala[0]);
+			char * voo_2 = get_voo_num_voo(**escala[1]);
+			char * voo_3 = get_voo_num_voo(**escala[2]);
+			char * voo_4 = get_voo_num_voo(**escala[3]);
 			strcpy(escalas[0],voo_1);
 			strcpy(escalas[1],voo_2);
 			strcpy(escalas[2],voo_3);
@@ -364,28 +388,37 @@ char ** cheapest_4(int ** escala){
 
 float precos_4(char * f1, char * f2, char * f3, char * f4){
 
-	// preco dos 4 voos
+	int preco = 0;
+	VOOS v = create_voo();
+	VOOS vs = create_voo();
+	VOOS vss = create_voo();
+	VOOS vsss = create_voo();
+	set_voo(v,f1);
+	set_voo(vs,f2);
+	set_voo(vss,f3);
+	set_voo(vsss,f4);
+	preco += get_preco_num_voo(get_num_voo(v));
+	preco += get_preco_num_voo(get_num_voo(vs));
+	preco += get_preco_num_voo(get_num_voo(vss));
+	preco += get_preco_num_voo(get_num_voo(vsss));
+	delete_voo(v);
+	delete_voo(vs);
+	delete_voo(vss);
+	delete_voo(vsss);
+
+	return preco;
 }
 
-char * get_choices(char * aero_p, char *  aero_c, int opt){
+char ** get_choices(char * aero_p, char *  aero_c, int opt){
 
 	FILE * v = fopen(FLIGHT, "r");
-	char line[LINE_BUFFER]; char def_line[LINE_BUFFER]; char * flight = NULL;
-	int ** escalas_2; int ** escalas_3; int ** escalas_4;
+	char line[LINE_BUFFER]; char def_line[LINE_BUFFER]; char ** flight = malloc(sizeof(char*)*4);
+	int *** escalas_2; int *** escalas_3; int *** escalas_4;
 	TUPLE * tup = malloc(sizeof(TUPLE));
 	int direct_cheap, i = 0, min = 72, atm_voo;
 	float preco_def = 0, preco_min;
 
-	/*
-		opt = 0 -> mais barato
-		opt = 1 -> mais rápido (direto)
-		opt = 2 -> 2 escalas
-		opt = 3 -> 3 escalas
-		opt = 4 -> 4 escalas
-	*/
-
 	tup = preco_direto(aero_p, aero_c);
-	TUPLE * tmp = tup;
 	direct_cheap = cheap_direct(tup,count_direct_flights(tup));
 
 	// menor voo
@@ -399,7 +432,7 @@ char * get_choices(char * aero_p, char *  aero_c, int opt){
 
 	escalas_2 = get_voos_2(get_voos(aero_p,aero_c));
 	char ** barato_2 = cheapest_2(escalas_2);
-	float preco_2 = precos_2(barato_2);
+	float preco_2 = precos_2(barato_2[0],barato_2[1]);
 
 	escalas_3 = get_voos_3(get_voos(aero_p,aero_c));
 	char ** barato_3 = cheapest_3(escalas_3);
@@ -424,43 +457,29 @@ char * get_choices(char * aero_p, char *  aero_c, int opt){
 					preco_def = get_preco(vtmp);
 					delete_voo(vtmp);
 				}
+
 				if(preco_def != 0) preco_min = mais_barato(preco_def, preco_2, preco_3, preco_4);
 
-				switch(preco_min){
-
-					case preco_def:
-						strcpy(flight,def_line);
-						break;
-
-					case preco_2:
-						strcpy(flight,barato_2);
-						break;
-
-					case preco_3:
-						strcpy(flight,barato_3);
-						break;
-
-					case preco_4:
-						strcpy(flight,barato_4);
-						break;
-				}
-
+				if (preco_min == preco_def) *flight = def_line;
+				else if (preco_min == preco_2) flight = barato_2;
+				else if (preco_min == preco_3) flight = barato_3;
+				else if (preco_min == preco_4) flight = barato_4;
 				break;
 
 			case 1: // mais rápido
-				if(get_num_voo(vs)==atm_voo) strcpy(flight,line);
+				if(get_num_voo(vs)==atm_voo) *flight = line;
 				break;
 
 			case 2: // melhor com 2 escalas (o mais barato)
-				strcpy(flight,barato_2);
+				flight = barato_2;
 				break;
 
 			case 3: // melhor com 3 escalas (o mais barato)
-				strcpy(flight,barato_3);
+				flight = barato_3;
 				break;
 
 			case 4: // melhor com 4 escalas (o mais barato)
-				strcpy(flight,barato_4);
+				flight = barato_4;
 				break;
 
 		}
@@ -471,3 +490,4 @@ char * get_choices(char * aero_p, char *  aero_c, int opt){
 	return flight;
 
 }
+
