@@ -98,12 +98,39 @@ int date_compare_bool(char * date_1, char * date_2){
 	return res;
 }
 
-int get_len(int a[]){
+int get_len(int * a){
 
 	int i = 0;
 
 	while(a){
-		a++;
+		i++;
 	}
-	return a;
+	return i;
+}
+
+int get_len_pointer(char ** a){
+
+	int i = 0;
+	while(*a){
+		i++;
+	}
+
+	return i;
+}
+
+float mais_barato(float x, float y, float w, float z){
+
+	float barato, tmp1, tmp2;
+
+	if(x<y) tmp1 = x;
+	else tmp1 = y;
+
+	if(w<z) tmp2 = w;
+	else tmp2 = z;
+
+	if(tmp1<tmp2) barato = tmp1;
+	else barato = tmp2;
+
+	return barato;
+
 }
