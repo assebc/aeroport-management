@@ -139,7 +139,7 @@ float get_preco_num_voo(int num_voo){
 	char line[LINE_BUFFER]; char * aux = NULL;
 	float preco;
 
-	while(fgets(line,LINE_BUFFER,v)!=NULL){
+	while(fgets(line,LINE_BUFFER,t)!=NULL){
 		BILHETES bs = create_ticket();
 		set_ticket(bs,line);
 		aux = get_voo_ticket(bs);
@@ -156,7 +156,7 @@ float get_preco_num_voo(int num_voo){
 		delete_voo(vs);
 		delete_ticket(bs);
 	}
-	fclose(v);
+	fclose(t);
 	return preco;
 }
 
