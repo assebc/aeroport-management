@@ -202,7 +202,7 @@ int *** get_voos(char * aero_p, char * aero_c){
 
 	int limit_time = 72;
 	// arrays com arrays dos voos
-
+	// ficha 4 alg
 	
 }
 
