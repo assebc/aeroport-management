@@ -16,6 +16,13 @@
 #define FLIGHT "data/voos.csv"
 #define TICKET "data/tickets.csv"
 
+typedef struct aresta{
+
+	int dest;
+	struct aresta * prox;
+
+} *LAdj, *GrafoL[];
+
 struct tup{
 
 	float preco;
@@ -198,12 +205,43 @@ int cheap_direct(TUPLE * t, int N){
 	return min;
 }
 
-int *** get_voos(char * aero_p, char * aero_c){
+LAdj append(int dest, LAdj cauda){
+    LAdj novo = malloc(sizeof(struct aresta));
+    novo->dest = dest;
+    novo->prox = cauda;
+    return novo;
+}
+
+void initGrafoL(GrafoL g, int N) {
+
+    for (int i=0; i<N; i++)
+        g[i] = NULL;
+}
+
+void fromMatriz(int N, int matriz[N][N], GrafoL out){
+	initGrafoL(out, N);
+	for(int i = 0;i<N;i++){
+		for(int j = 0;j<N;j++){
+			if (matriz[i][j] == 1){
+				out[i] = append(j, out[i]);
+			}
+		}
+	}
+}
+
+
+int *** get_voos(char * aero_p, char * aero_c, int N, int matriz[N][N]){
 
 	int limit_time = 72;
-	// arrays com arrays dos voos
-	// ficha 4 alg
-	
+	int *** results = malloc(sizeof(int)*(sizeof(int)));
+	GrafoL out = malloc(sizeof(struct aresta)*N);
+
+	fromMatriz(N,matriz,out);
+
+
+
+
+	return results;
 }
 
 int *** get_voos_2(int *** voos){
@@ -409,7 +447,7 @@ float precos_4(char * f1, char * f2, char * f3, char * f4){
 	return preco;
 }
 
-char ** get_choices(char * aero_p, char *  aero_c, int opt){
+char ** get_choices(char * aero_p, char *  aero_c, int opt, int N, int matriz[N][N]){
 
 	FILE * v = fopen(FLIGHT, "r");
 	char line[LINE_BUFFER]; char def_line[LINE_BUFFER]; char ** flight = malloc(sizeof(char*)*4);
@@ -430,15 +468,15 @@ char ** get_choices(char * aero_p, char *  aero_c, int opt){
 		}
 	}
 
-	escalas_2 = get_voos_2(get_voos(aero_p,aero_c));
+	escalas_2 = get_voos_2(get_voos(aero_p,aero_c,N,matriz));
 	char ** barato_2 = cheapest_2(escalas_2);
 	float preco_2 = precos_2(barato_2[0],barato_2[1]);
 
-	escalas_3 = get_voos_3(get_voos(aero_p,aero_c));
+	escalas_3 = get_voos_3(get_voos(aero_p,aero_c,N,matriz));
 	char ** barato_3 = cheapest_3(escalas_3);
 	float preco_3 = precos_3(barato_3[0],barato_3[1],barato_3[2]);
 
-	escalas_4 = get_voos_4(get_voos(aero_p,aero_c));
+	escalas_4 = get_voos_4(get_voos(aero_p,aero_c,N,matriz));
 	char ** barato_4 = cheapest_4(escalas_4);
 	float preco_4 = precos_4(barato_4[0],barato_4[1],barato_4[2],barato_4[3]);
 

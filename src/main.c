@@ -12,9 +12,9 @@
 #include "includes/parser.h"
 #include "includes/parsing.h"
 
-void print_f5(char * ap, char * ac, int opt){
+void print_f5(char * ap, char * ac, int opt, int N, int matriz[N][N]){
 
-	char ** flight = get_choices(ap, ac, opt);
+	char ** flight = get_choices(ap, ac, opt, N, matriz);
 
 	btree * tree = btree_organizer();
 
@@ -28,7 +28,7 @@ void print_f5(char * ap, char * ac, int opt){
 
 			num_voos = get_len_pointer(flight);
 
-			if (num_voos != 1) print_f5(ap,ac,num_voos);
+			if (num_voos != 1) print_f5(ap,ac,num_voos,N,matriz);
 			else{
 
 				strcpy(flights,*flight);
