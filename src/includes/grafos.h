@@ -18,6 +18,8 @@ int cheap_direct(TUPLE * t, int N);
 LAdj append(int dest, LAdj cauda);
 void initGrafoL(GrafoL g);
 void fromMatriz(int N, int matriz[N][N], GrafoL out);
+int DFRec(GrafoL g, int or, int v[], int p[], int l[]);
+int DF(GrafoL g, int or, int v[], int p[], int l[]);
 
 int *** get_voos(char * aero_p, char * aero_c, int N, int matriz[N][N]);
 int *** get_voos_2(int *** voos);

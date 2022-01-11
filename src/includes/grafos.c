@@ -16,13 +16,6 @@
 #define FLIGHT "data/voos.csv"
 #define TICKET "data/tickets.csv"
 
-typedef struct aresta{
-
-	int dest;
-	struct aresta * prox;
-
-} *LAdj, *GrafoL[];
-
 struct tup{
 
 	float preco;
@@ -32,8 +25,6 @@ struct tup{
 };
 
 typedef struct tup *TUPLE;
-
-// strongly connected components
 
 int aeroportos(){
 
@@ -49,6 +40,15 @@ int aeroportos(){
 
 	return acum;
 }
+
+#define NV aeroportos()
+
+typedef struct aresta{
+
+	int dest;
+	struct aresta * prox;
+
+} *LAdj, *GrafoL[];
 
 char ** list_aeroport(int N){
 
@@ -229,14 +229,46 @@ void fromMatriz(int N, int matriz[N][N], GrafoL out){
 	}
 }
 
+int isNotVisited(int x, int * path){
+    int size = get_len(path);
+    for (int i = 0; i < size; i++)
+        if (path[i] == x)
+            return 0;
+    return 1;
+}
+
+int DFRec(GrafoL g, int or, int v[], int p[], int l[]){
+    int i = 1; LAdj a;
+    v[or]=-1;
+    for (a=g[or]; a!=NULL; a=a->prox){
+        if (!v[a->dest]){
+            p[a->dest] = or;
+            l[a->dest] = 1+l[or];
+            i+=DFRec(g,a->dest,v,p,l);
+        }
+    }
+    v[or]=1;
+    return i;
+}
+
+int DF(GrafoL g, int or, int v[], int p[], int l[]){
+    int i;
+    for (i=0; i<NV; i++) {
+        v[i]=0;
+        p[i] = -1;
+        l[i] = -1;
+    }
+    p[or] = -1; l[or] = 0;
+    return DFRec (g,or,v,p,l);
+}
 
 int *** get_voos(char * aero_p, char * aero_c, int N, int matriz[N][N]){
 
 	int limit_time = 72;
 	int *** results = malloc(sizeof(int)*(sizeof(int)));
-	GrafoL out = malloc(sizeof(struct aresta)*N);
 
-	fromMatriz(N,matriz,out);
+	GrafoL * out = malloc(sizeof(struct aresta)*NV);
+	fromMatriz(N,matriz,*out);
 
 
 
