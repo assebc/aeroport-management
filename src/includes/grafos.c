@@ -229,264 +229,42 @@ void fromMatriz(int N, int matriz[N][N], GrafoL out){
 	}
 }
 
-int isNotVisited(int x, int * path){
-    int size = get_len(path);
-    for (int i = 0; i < size; i++)
-        if (path[i] == x)
-            return 0;
-    return 1;
-}
-
-int DFRec(GrafoL g, int or, int v[], int p[], int l[]){
-    int i = 1; LAdj a;
-    v[or]=-1;
-    for (a=g[or]; a!=NULL; a=a->prox){
-        if (!v[a->dest]){
-            p[a->dest] = or;
-            l[a->dest] = 1+l[or];
-            i+=DFRec(g,a->dest,v,p,l);
-        }
-    }
-    v[or]=1;
-    return i;
-}
-
-int DF(GrafoL g, int or, int v[], int p[], int l[]){
-    int i;
-    for (i=0; i<NV; i++) {
-        v[i]=0;
-        p[i] = -1;
-        l[i] = -1;
-    }
-    p[or] = -1; l[or] = 0;
-    return DFRec (g,or,v,p,l);
-}
-
-int *** get_voos(char * aero_p, char * aero_c, int N, int matriz[N][N]){
-
+void BF_aux(GrafoL g, int or, int des, int opt, int ** l){ // to do
 	int limit_time = 72;
-	int *** results = malloc(sizeof(int)*(sizeof(int)));
-
-	GrafoL * out = malloc(sizeof(struct aresta)*NV);
-	fromMatriz(N,matriz,*out);
 
 
+	
+	
+}
 
+
+int ** BF (GrafoL g, int or, int des, int opt){
+   
+	int ** results = malloc((sizeof(int)*(sizeof(int)))*opt);
+	int ** l = malloc(sizeof(int)*sizeof(int));
+
+	BF_aux(g,or,des,opt,l);
+	results = l;
 
 	return results;
 }
 
-int *** get_voos_2(int *** voos){
 
-	int i = 0, j = 0;
-	int *** voos_2 = malloc(sizeof (char*)* sizeof(char*) * 200);
-
-	while(voos){
-
-		if(get_len(*voos[i]) == 2){
-			while(*voos_2[j]){
-				**voos_2[0] = **voos[0];
-				**voos_2[1] = **voos[1];
-				j++;
-				break;
-			}
-		}
-
-		i++;
-	}
-
-	return voos_2;
-}
-
-char ** cheapest_2(int *** escala){
-
-	char ** escalas = NULL;
-	float aux_price = 1000000, aux_1, aux_2, atm_price;
-
-	while(escala){
-
-		aux_1 = get_preco_num_voo(**escala[0]);
-		aux_2 = get_preco_num_voo(**escala[1]);
-		atm_price = aux_1 + aux_2;
-		if(atm_price<aux_price){
-			char * voo_1 = get_voo_num_voo(**escala[0]);
-			char * voo_2 = get_voo_num_voo(**escala[1]);
-			strcpy(escalas[0],voo_1);
-			strcpy(escalas[1],voo_2);
-			aux_1 = 0; aux_2 = 0, atm_price = 0;
-		}
-		
-	}
-
-	return escalas;
-}
-
-float precos_2(char * f1, char * f2){
-
-	int preco = 0;
-	VOOS v = create_voo();
-	VOOS vs = create_voo();
-	set_voo(v,f1);
-	set_voo(vs,f2);
-	preco += get_preco_num_voo(get_num_voo(v));
-	preco += get_preco_num_voo(get_num_voo(vs));
-	delete_voo(v);
-	delete_voo(vs);
-
-	return preco;
-}
-
-int *** get_voos_3(int *** voos){
-
-	int i = 0, j = 0;
-	int *** voos_3 =  malloc(sizeof (char*)* sizeof(char*) * 300);
-
-	while(voos){
-
-		if(get_len(*voos[i]) == 3){
-			while(*voos_3[j]){
-				*voos_3[0] = *voos[0];
-				*voos_3[1] = *voos[1];
-				*voos_3[2] = *voos[2];
-				j++;
-				break;
-			}
-		}
-
-		i++;
-	}
-
-	return voos_3;
-
-}
-char ** cheapest_3(int *** escala){
-
-	char ** escalas = NULL;
-	int aux_price = 1000000, aux_1, aux_2, aux_3, atm_price;
-
-	while(escala){
-
-		aux_1 = get_preco_num_voo(**escala[0]);
-		aux_2 = get_preco_num_voo(**escala[1]);
-		aux_3 = get_preco_num_voo(**escala[2]);
-		atm_price = aux_1 + aux_2 + aux_3;
-		if(atm_price<aux_price){
-			char * voo_1 = get_voo_num_voo(**escala[0]);
-			char * voo_2 = get_voo_num_voo(**escala[1]);
-			char * voo_3 = get_voo_num_voo(**escala[2]);
-			strcpy(escalas[0],voo_1);
-			strcpy(escalas[1],voo_2);
-			strcpy(escalas[2],voo_3);
-			aux_1 = 0; aux_2 = 0; aux_3 = 0; atm_price = 0;
-		}
-		
-	}
-
-	return escalas;
-}
-
-float precos_3(char * f1, char * f2, char * f3){
-
-	int preco = 0;
-	VOOS v = create_voo();
-	VOOS vs = create_voo();
-	VOOS vss = create_voo();
-	set_voo(v,f1);
-	set_voo(vs,f2);
-	set_voo(vss,f3);
-	preco += get_preco_num_voo(get_num_voo(v));
-	preco += get_preco_num_voo(get_num_voo(vs));
-	preco += get_preco_num_voo(get_num_voo(vss));
-	delete_voo(v);
-	delete_voo(vs);
-	delete_voo(vss);
-
-	return preco;
-}
-
-int *** get_voos_4(int *** voos){
-
-	int i = 0, j = 0;
-	int *** voos_4 =  malloc(sizeof (char*)* sizeof(char*) * 400);
-
-	while(voos){
-
-		if(get_len(*voos[i]) == 4){
-			while(*voos_4[j]){
-				**voos_4[0] = **voos[0];
-				**voos_4[1] = **voos[1];
-				**voos_4[2] = **voos[2];
-				**voos_4[3] = **voos[3];
-				j++;
-				break;
-			}
-		}
-
-		i++;
-	}
-
-	return voos_4;
-}
-char ** cheapest_4(int *** escala){
-
-	char ** escalas = NULL;
-	int aux_price = 1000000, aux_1, aux_2, aux_3, aux_4, atm_price;
-
-	while(escala){
-
-		aux_1 = get_preco_num_voo(**escala[0]);
-		aux_2 = get_preco_num_voo(**escala[1]);
-		aux_3 = get_preco_num_voo(**escala[2]);
-		aux_4 = get_preco_num_voo(**escala[3]);
-		atm_price = aux_1 + aux_2 + aux_3 + aux_4;
-		if(atm_price<aux_price){
-			char * voo_1 = get_voo_num_voo(**escala[0]);
-			char * voo_2 = get_voo_num_voo(**escala[1]);
-			char * voo_3 = get_voo_num_voo(**escala[2]);
-			char * voo_4 = get_voo_num_voo(**escala[3]);
-			strcpy(escalas[0],voo_1);
-			strcpy(escalas[1],voo_2);
-			strcpy(escalas[2],voo_3);
-			strcpy(escalas[3],voo_4);
-			aux_1 = 0; aux_2 = 0; aux_3 = 0; aux_4 = 0; atm_price = 0;
-		}
-		
-	}
-
-	return escalas;
-}
-
-float precos_4(char * f1, char * f2, char * f3, char * f4){
-
-	int preco = 0;
-	VOOS v = create_voo();
-	VOOS vs = create_voo();
-	VOOS vss = create_voo();
-	VOOS vsss = create_voo();
-	set_voo(v,f1);
-	set_voo(vs,f2);
-	set_voo(vss,f3);
-	set_voo(vsss,f4);
-	preco += get_preco_num_voo(get_num_voo(v));
-	preco += get_preco_num_voo(get_num_voo(vs));
-	preco += get_preco_num_voo(get_num_voo(vss));
-	preco += get_preco_num_voo(get_num_voo(vsss));
-	delete_voo(v);
-	delete_voo(vs);
-	delete_voo(vss);
-	delete_voo(vsss);
-
-	return preco;
-}
 
 char ** get_choices(char * aero_p, char *  aero_c, int opt, int N, int matriz[N][N]){
 
+	char ** flight = malloc(sizeof(char*)*4);
+/*
 	FILE * v = fopen(FLIGHT, "r");
-	char line[LINE_BUFFER]; char def_line[LINE_BUFFER]; char ** flight = malloc(sizeof(char*)*4);
-	int *** escalas_2; int *** escalas_3; int *** escalas_4;
+	char line[LINE_BUFFER]; char def_line[LINE_BUFFER]; 
+	int ** escalas_2; int ** escalas_3; int ** escalas_4;
 	TUPLE * tup = malloc(sizeof(TUPLE));
 	int direct_cheap, i = 0, min = 72, atm_voo;
 	float preco_def = 0, preco_min;
+	char ** aero = list_aeroport(NV);
+
+	GrafoL * out = malloc(sizeof(struct aresta)*NV);
+	fromMatriz(NV,matriz,*out);
 
 	tup = preco_direto(aero_p, aero_c);
 	direct_cheap = cheap_direct(tup,count_direct_flights(tup));
@@ -500,17 +278,17 @@ char ** get_choices(char * aero_p, char *  aero_c, int opt, int N, int matriz[N]
 		}
 	}
 
-	escalas_2 = get_voos_2(get_voos(aero_p,aero_c,N,matriz));
-	char ** barato_2 = cheapest_2(escalas_2);
-	float preco_2 = precos_2(barato_2[0],barato_2[1]);
+	escalas_2 = get_voos_2(BF(*out, get_indice_aeroport(aero_p,aero), get_indice_aeroport(aero_c,aero),2) );
+	//char ** barato_2 = cheapest_2(escalas_2);
+	//float preco_2 = precos_2(barato_2[0],barato_2[1]);
 
-	escalas_3 = get_voos_3(get_voos(aero_p,aero_c,N,matriz));
-	char ** barato_3 = cheapest_3(escalas_3);
-	float preco_3 = precos_3(barato_3[0],barato_3[1],barato_3[2]);
+	escalas_3 = get_voos_3(BF(*out, get_indice_aeroport(aero_p,aero), get_indice_aeroport(aero_c,aero),3) );
+	//char ** barato_3 = cheapest_3(escalas_3);
+	//float preco_3 = precos_3(barato_3[0],barato_3[1],barato_3[2]);
 
-	escalas_4 = get_voos_4(get_voos(aero_p,aero_c,N,matriz));
-	char ** barato_4 = cheapest_4(escalas_4);
-	float preco_4 = precos_4(barato_4[0],barato_4[1],barato_4[2],barato_4[3]);
+	escalas_4 = get_voos_4(BF(*out, get_indice_aeroport(aero_p,aero), get_indice_aeroport(aero_c,aero),4) );
+	//char ** barato_4 = cheapest_4(escalas_4);
+	//float preco_4 = precos_4(barato_4[0],barato_4[1],barato_4[2],barato_4[3]);
 
 	while(fgets(line,LINE_BUFFER,v)!=NULL){
 		VOOS vs = create_voo();
@@ -556,7 +334,7 @@ char ** get_choices(char * aero_p, char *  aero_c, int opt, int N, int matriz[N]
 		delete_voo(vs);
 	}
 	fclose(v);
-
+*/
 	return flight;
 
 }

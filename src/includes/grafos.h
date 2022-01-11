@@ -18,19 +18,9 @@ int cheap_direct(TUPLE * t, int N);
 LAdj append(int dest, LAdj cauda);
 void initGrafoL(GrafoL g);
 void fromMatriz(int N, int matriz[N][N], GrafoL out);
-int DFRec(GrafoL g, int or, int v[], int p[], int l[]);
-int DF(GrafoL g, int or, int v[], int p[], int l[]);
 
-int *** get_voos(char * aero_p, char * aero_c, int N, int matriz[N][N]);
-int *** get_voos_2(int *** voos);
-char ** cheapest_2(int *** escala);
-float precos_2(char ** line);
-int *** get_voos_3(int *** voos);
-char ** cheapest_3(int *** escala);
-float precos_3(char ** line);
-int *** get_voos_4(int *** voos);
-char ** cheapest_4(int *** escala);
-float precos_4(char ** line);
+void BF_aux(GrafoL g, int or, int des, int opt, int ** l);
+int ** BF (GrafoL g, int or, int des, int opt);
 
 char ** get_choices(char * aero_p, char *  aero_c, int opt, int N, int matriz[N][N]);
 
