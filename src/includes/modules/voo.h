@@ -2,7 +2,6 @@
 #define VOO_H
 
 typedef struct voo *VOOS;
-#define FLIGHT "data/voos.csv"
 
 void * create_voo();
 void delete_voo(void * v);

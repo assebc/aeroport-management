@@ -2,7 +2,6 @@
 #define TICKET_H
 
 typedef struct ticket *BILHETES;
-#define TICKET "data/tickets.csv"
 
 void * create_ticket();
 void delete_ticket(void * b);

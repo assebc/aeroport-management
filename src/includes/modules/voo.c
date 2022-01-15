@@ -18,7 +18,7 @@ struct voo {
 };
 
 typedef struct voo *VOOS;
-#define FLIGHT "data/voos.csv"
+#define FLIGHT "../data/voos.csv"
 #define LINE_BUFFER 1024
 
 void * create_voo(){

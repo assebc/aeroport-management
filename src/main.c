@@ -12,6 +12,59 @@
 #include "includes/parser.h"
 #include "includes/parsing.h"
 
+#define LINE_BUFFER 1024
+
+#define PLANE "data/avioes.csv"
+#define AERO "data/aeroportos.csv"
+#define FLIGHT "data/voos.csv"
+#define TICKET "data/tickets.csv"
+
+void delete_line(int delete_line, char * filename){
+	FILE *fileptr1, *fileptr2;
+    char ch;
+    int temp = 1;
+
+    //open file in read mode
+    fileptr1 = fopen(filename, "r");
+    ch = getc(fileptr1);
+   	while (ch != EOF){
+        printf("%c", ch);
+        ch = getc(fileptr1);
+    }
+    //rewind
+    rewind(fileptr1);
+    //open new file in write mode
+    fileptr2 = fopen("replica.csv", "w");
+    ch = 'A';
+    while (ch != EOF)
+    {
+        ch = getc(fileptr1);
+        //except the line to be deleted
+        if (temp != delete_line)
+        {
+            //copy all lines in file replica.c
+            putc(ch, fileptr2);
+        }
+        if (ch == '\n')
+        {
+            temp++;
+        }
+    }
+    fclose(fileptr1);
+    fclose(fileptr2);
+    remove(filename);
+    //rename the file replica.c to original name
+    rename("replica.csv", filename);
+    fileptr1 = fopen(filename, "r");
+    ch = getc(fileptr1);
+    while (ch != EOF)
+    {
+        printf("%c", ch);
+        ch = getc(fileptr1);
+    }
+    fclose(fileptr1);
+}
+
 void print_f5(char * ap, char * ac, int opt, int N, int matriz[N][N]){
 
 	char ** flight = get_choices(ap, ac, opt, N, matriz);
@@ -218,10 +271,10 @@ void print_f5(char * ap, char * ac, int opt, int N, int matriz[N][N]){
 	}
 }
 
-int insert(int f1){
+int info(int f1){
 
 	int f1_1;
-	printf("O que deseja inserir?\n");
+	printf("O que deseja?\n");
 	printf("Aviao : 1\n");
 	printf("Aeroporto : 2\n");
 	printf("Voo: 3\n");
@@ -233,21 +286,123 @@ int insert(int f1){
 
 void insert_f1(int f1_1){
 
-	switch(f1_1){
+	char * cod_registo = NULL; char * marca = NULL; char * modelo = NULL;
+	int num_lugares;
+	float velocidade_cruzeiro, consumo_medio;
+
+	char * cod_IATA = NULL; char * nome = NULL; char * cidade = NULL;
+	int altitude;
+
+	int num_voo;
+	char * data_partida = NULL; char * data_chegada = NULL; 
+	char * aeroport_partida = NULL;  char * aeroport_chegada = NULL; 
+	char * aviao_voo = NULL;
+
+	char * nome_passageiro = NULL; char * voo_ticket = NULL; char * lugar = NULL;
+	int nif;
+	float preco; float distancia;
+
+	switch(f1_1){		
 
 		case 1: // aviao
+
+			printf("Insere codigo de registo: ");
+			scanf("%s", cod_registo);
+			putchar('\n');
+			printf("Insere marca: ");
+			scanf("%s", marca);
+			putchar('\n');
+			printf("Insere modelo: ");
+			scanf("%s", modelo);
+			putchar('\n');
+			printf("Insere numero de lugares: ");
+			scanf("%d", &num_lugares);
+			putchar('\n');
+			printf("Insere velocidade de cruzeiro: ");
+			scanf("%f", &velocidade_cruzeiro);
+			putchar('\n');
+			printf("Insere consumo medio: ");
+			scanf("%f", &consumo_medio);
+			putchar('\n');
+
+			FILE * p = fopen(PLANE,"w");
+			fprintf(p, "%s;%s;%s;%d;%.2f;%.2f\n", cod_registo, marca, modelo, num_lugares, velocidade_cruzeiro, consumo_medio);
+			fclose(p);
 
 			break;
 
 		case 2: // aeroporto
 
+			printf("Insere codigo IATA: ");
+			scanf("%s", cod_IATA);
+			putchar('\n');
+			printf("Insere nome: ");
+			scanf("%s", nome);
+			putchar('\n');
+			printf("Insere cidade: ");
+			scanf("%s", cidade);
+			putchar('\n');
+			printf("Insere altitude: ");
+			scanf("%d", &altitude);
+			putchar('\n');
+
+			FILE * a = fopen(AERO,"w");
+			fprintf(a, "%s;%s;%s;%d\n", cod_IATA, nome, cidade, altitude);
+			fclose(a);
+
 			break;
 
 		case 3: // voo
 
+			printf("Insere numero de voo: ");
+			scanf("%d", &num_voo);
+			putchar('\n');
+			printf("Insere data de partida: ");
+			scanf("%s", data_partida);
+			putchar('\n');
+			printf("Insere data de chegada: ");
+			scanf("%s", data_chegada);
+			putchar('\n');
+			printf("Insere aeroporto de partida: ");
+			scanf("%s", aeroport_partida);
+			putchar('\n');
+			printf("Insere aeroporto de chegada: ");
+			scanf("%s", aeroport_chegada);
+			putchar('\n');
+			printf("Insere aviao: ");
+			scanf("%s", aviao_voo);
+			putchar('\n');
+
+			FILE * v = fopen(FLIGHT,"w");
+			fprintf(v, "%d;%s;%s;%s;%s;%s\n", num_voo, data_partida, data_chegada, aeroport_partida, aeroport_chegada, aviao_voo);
+			fclose(v);
+
 			break;
 
 		case 4: // bilhete
+
+			printf("Insere nome do passageiro: ");
+			scanf("%s", nome_passageiro);
+			putchar('\n');
+			printf("Insere nif: ");
+			scanf("%d", &nif);
+			putchar('\n');
+			printf("Insere voo: ");
+			scanf("%s", voo_ticket);
+			putchar('\n');
+			printf("Insere lugar: ");
+			scanf("%s", lugar);
+			putchar('\n');
+			printf("Insere preco: ");
+			scanf("%f", &preco);
+			putchar('\n');
+			printf("Insere distancia: ");
+			scanf("%f", &distancia);
+			putchar('\n');
+
+			FILE * t = fopen(TICKET,"w");
+			fprintf(t, "%s;%d;%s;%s;%.2f;%.2f\n", nome_passageiro, nif, voo_ticket, lugar, preco, distancia);
+			fclose(t);
 
 			break;
 
@@ -255,9 +410,97 @@ void insert_f1(int f1_1){
 
 }
 
+void remove_f1(int f1_1){
+	int nif, num_voo, i = 0;
+	char line[LINE_BUFFER]; char * iata = NULL; char * registo = NULL;
+	switch(f1_1){
+		case 1:
+
+			printf("Qual o codigo de registo?\n");
+			scanf("%s", registo);
+
+			FILE * av = fopen(PLANE, "r");
+			while(fgets(line,LINE_BUFFER,av)!=NULL){
+				AVIOES a = create_aviao();
+				set_aviao(a,line);
+				if(strcmp(get_cod_registo(a),registo) == 0){
+					delete_line(i,PLANE);
+					delete_aviao(a);
+					break;
+				}
+				i++;
+				delete_aviao(a);
+			}
+			fclose(av);
+
+			break;
+
+		case 2:
+			printf("Qual o codigo IATA?\n");
+			scanf("%s", iata);
+
+			FILE * a = fopen(AERO, "r");
+			while(fgets(line,LINE_BUFFER,a)!=NULL){
+				AEROPORTO as = create_aeroporto();
+				set_aeroporto(as,line);
+				if(strcmp(get_cod_IATA(as),iata) == 0){
+					delete_line(i,AERO);
+					delete_aeroporto(as);
+					break;
+				}
+				i++;
+				delete_aeroporto(as);
+			}
+			fclose(a);
+
+			break;
+
+		case 3:
+			printf("Qual o numero de voo?\n");
+			scanf("%d", &num_voo);
+
+			FILE * f = fopen(FLIGHT, "r");
+			while(fgets(line,LINE_BUFFER,f)!=NULL){
+				VOOS vs = create_voo();
+				set_voo(vs,line);
+				if(get_num_voo(vs) == num_voo){
+					delete_line(i,FLIGHT);
+					delete_voo(vs);
+					break;
+				}
+				i++;
+				delete_voo(vs);
+			}
+			fclose(f);
+
+			break;
+
+		case 4:
+			printf("Qual o nif do bilhete que pretende remover do sistema?\n");
+			scanf("%d", &nif);
+
+			FILE * t = fopen(TICKET, "r");
+			while(fgets(line,LINE_BUFFER,t)!=NULL){
+				BILHETES bs = create_ticket();
+				set_ticket(bs,line);
+				if(get_nif(bs) == nif){
+					delete_line(i,TICKET);
+					delete_ticket(bs);
+					break;
+				}
+				i++;
+				delete_ticket(bs);
+			}
+			fclose(t);
+
+			break;
+	}
+
+}
+
 int main(){
 
-	int funcionalide, opt, f1 f1_1;
+	int funcionalidade, opt, f1, f1_1;
 	int N = aeroportos();
 	int matriz[N][N];
 	char * ap = NULL; char * ac = NULL;
@@ -278,32 +521,22 @@ int main(){
 			printf("O que deseja fazer?\n");
 			printf("Inserir : 1\n");
 			printf("Remover : 2\n");
-			printf("Alterar : 3\n");
-			printf("Listar : 4\n");
 			scanf("%d", &f1);
 			putchar('\n');
 
 			switch(f1){
 
 				case 1 :
-					f1_1 = insert(f1);
+					f1_1 = info(f1);
 					insert_f1(f1_1);
 					break;
-
+					
 				case 2 :
-
-					break;
-
-				case 3 :
-
-					break;
-
-				case 4 :
-
+					f1_1 = info(f1);
+					remove_f1(f1_1);
 					break;
 			}
 			
-
 			break;
 
 		case 5 :

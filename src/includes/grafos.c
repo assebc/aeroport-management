@@ -11,10 +11,10 @@
 
 #define LINE_BUFFER 1024
 
-#define PLANE "data/avioes.csv"
-#define AERO "data/aeroportos.csv"
-#define FLIGHT "data/voos.csv"
-#define TICKET "data/tickets.csv"
+#define PLANE "aeroport-management/src/includes/data/avioes.csv"
+#define AERO "aeroport-management/src/includes/data/aeroportos.csv"
+#define FLIGHT "aeroport-management/src/includes/data/voos.csv"
+#define TICKET "aeroport-management/src/includes/data/tickets.csv"
 
 struct tup{
 
@@ -37,6 +37,7 @@ int aeroportos(){
 		acum++;
 	}
 
+	fclose(a);
 
 	return acum;
 }
