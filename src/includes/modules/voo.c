@@ -4,6 +4,7 @@
 #include <ctype.h>
 
 #include "aeroporto.h"
+#include "avioes.h"
 
 struct voo {
 
@@ -151,6 +152,70 @@ char * get_voo_num_voo(int num_voo){
 	fclose(f);
 
 	return voo;	
+}
+
+char * get_data_partida_num(int num_voo){
+
+	FILE * f = fopen(FLIGHT, "r");
+	char line[LINE_BUFFER]; char * data = NULL;
+
+	while(fgets(line,LINE_BUFFER,f)!=NULL){
+		VOOS vs = create_voo();
+		set_voo(vs,line);
+		if(get_num_voo(vs)==num_voo){
+			data = get_data_partida(vs);
+			delete_voo(vs);
+			break;
+		}
+		delete_voo(vs);	
+	}
+	fclose(f);
+
+	return data;	
+
+}
+
+char * get_data_chegada_num(int num_voo){
+
+	FILE * f = fopen(FLIGHT, "r");
+	char line[LINE_BUFFER]; char * data = NULL;
+
+	while(fgets(line,LINE_BUFFER,f)!=NULL){
+		VOOS vs = create_voo();
+		set_voo(vs,line);
+		if(get_num_voo(vs)==num_voo){
+			data = get_data_partida(vs);
+			delete_voo(vs);
+			break;
+		}
+		delete_voo(vs);	
+	}
+	fclose(f);
+
+	return data;
+
+}
+
+char * get_aviao_nvoo(int num_voo){
+
+	FILE * f = fopen(FLIGHT, "r");
+	char line[LINE_BUFFER]; char * aviao = NULL;
+
+	while(fgets(line,LINE_BUFFER,f)!=NULL){
+		VOOS vs = create_voo();
+		set_voo(vs,line);
+		if(get_num_voo(vs)==num_voo){
+			aviao = get_aviao_voo(vs);
+			delete_voo(vs);
+			break;
+		}
+		delete_voo(vs);	
+	}
+	fclose(f);
+
+	return aviao;
+
+
 }
 
 void print_voo(void * v){

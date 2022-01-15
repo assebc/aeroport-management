@@ -14,6 +14,7 @@ int directly_connected(char * partida, char * chegada);
 float tempo_total_direto(char * partida, char * chegada);
 void swap_tup(int i, int j, TUPLE * res);
 TUPLE * preco_direto(char * partida, char * chegada);
+int directly_connected_num(char * partida, char * chegada);
 int count_direct_flights(TUPLE * t);
 int cheap_direct(TUPLE * t, int N);
 char ** cheaps(int ** escalas);
@@ -21,8 +22,7 @@ LAdj append(int dest, LAdj cauda);
 void initGrafoL(GrafoL g);
 void fromMatriz(int N, int matriz[N][N], GrafoL out);
 
-void BF_aux(GrafoL g, int or, int des, int opt, int ** l);
-int ** BF (GrafoL g, char * aero_p, char * aero_c, int opt);
+int ** BF (GrafoL g, int or, int des, int opt, int v[], int p[], int l[]);
 
 char ** get_choices(char * aero_p, char *  aero_c, int opt, int N, int matriz[N][N]);
 

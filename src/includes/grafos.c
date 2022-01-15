@@ -136,6 +136,7 @@ int directly_connected(char * partida, char * chegada){
 	return r;
 }
 
+
 float tempo_total_direto(char * partida, char * chegada){
 
 	float tempo = 0;
@@ -210,7 +211,17 @@ TUPLE * preco_direto(char * partida, char * chegada){
 	return res;
 }
 
+int directly_connected_num(char * partida, char * chegada){
 
+	int r = 0;
+	if (directly_connected(partida,chegada) == 1){
+		TUPLE * out = preco_direto(partida, chegada);
+		r = out[0]->num_voo;
+	}
+
+
+	return r;
+}
 
 int count_direct_flights(TUPLE * t){
 
@@ -325,24 +336,30 @@ void fromMatriz(int N, int matriz[N][N], GrafoL out){
 	}
 }
 
-void BF_aux(GrafoL g, int or, int des, int opt, int ** l){ // to do
-	int limit_time = 72;
-
-
-	
-	
-}
-
-
-int ** BF (GrafoL g, char * aero_p, char * aero_c, int opt){
-   
-	int ** results = malloc((sizeof(int)*(sizeof(int)))*opt+1);
-	int ** l = results;
-	int or = get_indice_aeroport(aero_p, list_aeroport(NV));
-	int des = get_indice_aeroport(aero_c, list_aeroport(NV));
-	BF_aux(g,or,des,opt+1,l);
-	results = l;
-
+int ** BF (GrafoL g, int or, int des, int opt, int v[], int p[], int l[]){
+	int i, x; LAdj a;
+	int q[NV], front, end;
+	int ** results = malloc(sizeof(int*)*NV);
+	for (i=0; i<NV; i++) {
+		v[i] = 0;
+		p[i] = -1;
+		l[i] = -1;
+	}		
+	front = end = 0;
+	q[end++] = or; //enqueue
+	v[or] = 1; p[or]=-1;l[or]=0;
+	i=1;
+	while (v[a->dest] != des){
+		x = q[front++]; //dequeue
+		for (a=g[x]; a!=NULL; a=a->prox)
+			if (!v[a->dest]){
+				i++;
+				v[a->dest]=1;
+				p[a->dest]=x;
+				l[a->dest]=1+l[x];
+				q[end++]=a->dest; //enqueue
+			}
+	}
 	return results;
 }
 
@@ -355,10 +372,12 @@ char ** get_choices(char * aero_p, char *  aero_c, int opt, int N, int matriz[N]
 	FILE * v = fopen(FLIGHT, "r");
 	char line[LINE_BUFFER]; char def_line[LINE_BUFFER]; 
 	TUPLE * tup = malloc(sizeof(TUPLE));
+	int * vis = malloc(sizeof(int)*NV); int * pai = malloc(sizeof(int)*NV); int * lists = malloc(sizeof(int)*NV);
 	int direct_cheap, i = 0, min = 72, atm_voo;
 	float preco_def = 0, preco_min;
-
+	char ** aeroports = list_aeroport(NV);
 	GrafoL * out = malloc(sizeof(struct aresta)*NV);
+	voos_matriz(N, matriz);
 	fromMatriz(NV,matriz,*out);
 
 	tup = preco_direto(aero_p, aero_c);
@@ -372,21 +391,25 @@ char ** get_choices(char * aero_p, char *  aero_c, int opt, int N, int matriz[N]
 			i++;
 		}
 	}
-
-	int ** escalas_2 = BF(*out,aero_p, aero_c, 2); // devolve indice aeroportos
+	
+	int ** escalas_2 = BF(*out,get_indice_aeroport(aero_p, aeroports), get_indice_aeroport(aero_c, aeroports), 3, vis, pai, lists); // devolve indice aeroportos
 	char ** barato_2 = cheaps(escalas_2); // voos mais baratos entre aeroportos
+
 	TUPLE * tup_2_1= preco_direto(barato_2[0],barato_2[1]);
 	TUPLE * tup_2_2 = preco_direto(barato_2[1],barato_2[2]);
+
 	float preco_2 =  tup_2_1[0]->preco + tup_2_2[0]->preco;// precos dos voos
 
-	int ** escalas_3 = BF(*out,aero_p, aero_c, 3);
+	int ** escalas_3 = BF(*out,get_indice_aeroport(aero_p, aeroports), get_indice_aeroport(aero_c, aeroports), 4, vis, pai, lists);
 	char ** barato_3 = cheaps(escalas_3);
+
 	TUPLE * tup_3_1 = preco_direto(barato_3[0],barato_3[1]);
 	TUPLE * tup_3_2 = preco_direto(barato_3[1],barato_3[2]);
 	TUPLE * tup_3_3 = preco_direto(barato_3[2],barato_3[3]);
+
 	float preco_3 = tup_3_1[0]->preco + tup_3_2[0]->preco + tup_3_3[0]->preco;
 
-	int ** escalas_4 = BF(*out,aero_p, aero_c, 4);
+	int ** escalas_4 = BF(*out,get_indice_aeroport(aero_p, aeroports), get_indice_aeroport(aero_c, aeroports), 5, vis, pai, lists);
 	char ** barato_4 = cheaps(escalas_4);
 
 	TUPLE * tup_4_1 = preco_direto(barato_4[0],barato_4[1]);

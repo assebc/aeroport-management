@@ -111,7 +111,7 @@ int get_len(int * a){
 int get_len_pointer(char ** a){
 
 	int i = 0;
-	while(*a){
+	while(a){
 		i++;
 	}
 

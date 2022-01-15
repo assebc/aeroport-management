@@ -22,6 +22,9 @@ char * get_aeroport_partida(void * v);
 char * get_aeroport_chegada(void * v);
 char * get_aviao_voo(void * v);
 char * get_voo_num_voo(int num_voo);
+char * get_data_partida_num(int num_voo);
+char * get_data_chegada_num(int num_voo);
+char * get_aviao_nvoo(int num_voo);
 
 void print_voo(void * v);
 void copy_voo(void* dst, void* src);
