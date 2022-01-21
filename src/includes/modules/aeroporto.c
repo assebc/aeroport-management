@@ -3,6 +3,8 @@
 #include <string.h>
 #include <ctype.h>
 
+#include "../define.h"
+
 struct aeroport {
 
 	char * cod_IATA;
@@ -13,7 +15,6 @@ struct aeroport {
 };
 
 typedef struct aeroport *AEROPORTO;
-#define AERO "data/aeroportos.csv"
 
 void * create_aeroporto(){
 
@@ -26,24 +27,20 @@ void * create_aeroporto(){
 void delete_aeroporto(void * a){
 
 	AEROPORTO as = (AEROPORTO) a;
-	free(as->cod_IATA);
-	free(as->nome);
-	free(as->cidade);
-	as->altitude = 0;
 	free(as);
 
 } 
 
 void set_cod_IATA(AEROPORTO a, char * s){
-	strcpy(a->cod_IATA,s);
+	a->cod_IATA = s;
 }
 
 void set_nome(AEROPORTO a, char * s){
-	strcpy(a->nome,s);
+	a->nome = s;
 }
 
 void set_cidade(AEROPORTO a, char * s){
-	strcpy(a->cidade,s);
+	a->cidade = s;
 }
 
 void set_altitude(AEROPORTO a, int x){

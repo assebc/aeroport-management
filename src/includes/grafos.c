@@ -2,19 +2,13 @@
 #include <stdlib.h>
 #include <string.h>
 
+#include "define.h"
 #include "parser.h"
 
 #include "modules/avioes.h"
 #include "modules/aeroporto.h"
 #include "modules/voo.h"
 #include "modules/ticket.h"
-
-#define LINE_BUFFER 1024
-
-#define PLANE "aeroport-management/src/includes/data/avioes.csv"
-#define AERO "aeroport-management/src/includes/data/aeroportos.csv"
-#define FLIGHT "aeroport-management/src/includes/data/voos.csv"
-#define TICKET "aeroport-management/src/includes/data/tickets.csv"
 
 struct tup{
 
@@ -77,7 +71,7 @@ int get_indice_aeroport(char * aeroporto, char * aeroportos[]){
 
 	int indice = 0;
 
-	while(strcmp(aeroporto,aeroportos[indice])!=0) indice++;
+	while(!strcmp(aeroporto,aeroportos[indice])) indice++;
 
 	return indice;
 }
@@ -187,7 +181,7 @@ TUPLE * preco_direto(char * partida, char * chegada){
 		VOOS vs = create_voo();
 		set_ticket(vs,aux);
 
-		if( (strcmp(get_aeroport_partida(vs), partida) == 0) && (strcmp(get_aeroport_chegada(vs), chegada) == 0) ){
+		if( (get_aeroport_partida(vs) ==  partida) && (get_aeroport_chegada(vs) == chegada) ){
 			res[i]->preco = get_preco(b);
 			res[i]->num_voo = get_num_voo(vs);
 			res[i]->tempo = date_compare(get_data_partida(vs),get_data_chegada(vs)) / 3600;
@@ -201,13 +195,6 @@ TUPLE * preco_direto(char * partida, char * chegada){
 	}
 
 	fclose(t);
-
-
-	i = 0; int j = 0;
-	while(res){
-		if (res[j]->preco < res[i]->preco) swap_tup(i,j,res);
-		j++;
-	}
 
 	return res;
 }
@@ -228,9 +215,7 @@ int count_direct_flights(TUPLE * t){
 
 	int num = 0;
 
-	while(t){
-		num++;
-	}
+	for(int i =0;t[i]!=NULL;i++) num++;
 
 	return num;
 }
@@ -385,7 +370,7 @@ char ** get_choices(char * aero_p, char *  aero_c, int opt, int N, int matriz[N]
 	direct_cheap = cheap_direct(tup,count_direct_flights(tup));
 
 	// menor voo
-	while(tup){
+	while(tup[i]!=NULL){
 		if(min>tup[i]->tempo){
 			min = tup[i]->tempo;
 			atm_voo = tup[i]->num_voo;

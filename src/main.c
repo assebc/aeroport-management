@@ -11,13 +11,7 @@
 #include "includes/grafos.h"
 #include "includes/parser.h"
 #include "includes/parsing.h"
-
-#define LINE_BUFFER 1024
-
-#define PLANE "data/avioes.csv"
-#define AERO "data/aeroportos.csv"
-#define FLIGHT "data/voos.csv"
-#define TICKET "data/tickets.csv"
+#include "includes/define.h"
 
 void delete_line(int delete_line, char * filename){
 	FILE *fileptr1, *fileptr2;
@@ -500,7 +494,9 @@ void remove_f1(int f1_1){
 
 int main(){
 
-	int funcionalidade, opt, f1, f1_1;
+	btree * vs = btree_organizer();
+	
+	int funcionalidade, opt, f1, f1_1, num_voo, opts;
 	int N = aeroportos();
 	int matriz[N][N];
 	char * ap = NULL; char * ac = NULL;
@@ -511,7 +507,7 @@ int main(){
 		}
 	}
 	
-	printf("Que funcionalidade? 1 ou 5?\n");
+	printf("Que funcionalidade? 1, 4 ou 5?\n");
 	scanf("%d",&funcionalidade);
 	putchar('\n');
 
@@ -539,6 +535,15 @@ int main(){
 			
 			break;
 
+		case 4 :
+			printf("Insira seu numero de voo: ");
+			scanf("%d",&num_voo);
+			putchar('\n');
+			opts = another_num_voo(num_voo, vs);
+			printf("Seu voo de opção será %d\n", opts);
+
+
+			break;
 		case 5 :
 			printf("Partida : \n");
 			scanf("%s", ap);

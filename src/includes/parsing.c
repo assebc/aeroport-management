@@ -4,6 +4,8 @@
 #include <ctype.h>
 #include <time.h>
 
+#include "define.h"
+
 #include "modules/avioes.h"
 #include "modules/aeroporto.h"
 #include "modules/voo.h"
@@ -12,14 +14,6 @@
 #include "btree.h"
 #include "parser.h"
 #include "grafos.h"
-
-#define PLANE "aeroport-management/src/includes/data/avioes.csv"
-#define AERO "aeroport-management/src/includes/data/aeroportos.csv"
-#define FLIGHT "aeroport-management/src/includes/data/voos.csv"
-#define TICKET "aeroport-management/src/includes/data/tickets.csv"
-
-
-#define LINE_BUFFER 1024
 
 btree * btree_organizer(){
 

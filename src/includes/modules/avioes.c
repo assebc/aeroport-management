@@ -3,6 +3,8 @@
 #include <string.h>
 #include <ctype.h>
 
+#include "../define.h"
+
 struct avioes {
 
 	char * cod_registo;
@@ -15,7 +17,6 @@ struct avioes {
 };
 
 typedef struct avioes *AVIOES;
-#define PLANE "data/avioes.csv"
 
 void * create_aviao(){
 

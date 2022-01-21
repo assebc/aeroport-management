@@ -3,6 +3,8 @@
 #include <string.h>
 #include <ctype.h>
 
+#include "../define.h"
+
 #include "voo.h"
 
 struct ticket {
@@ -17,8 +19,6 @@ struct ticket {
 };
 
 typedef struct ticket *BILHETES;
-#define TICKET "data/tickets.csv"
-#define LINE_BUFFER 1024
 
 void * create_ticket(){
 
@@ -31,18 +31,12 @@ void * create_ticket(){
 void delete_ticket(void * b){
 
 	BILHETES bs = (BILHETES) b;
-	free(bs->nome_passageiro);
-	bs->nif = 0;
-	free(bs->voo_ticket);
-	free(bs->lugar);
-	bs->preco = 0;
-	bs->distancia = 0;
 	free(bs);
 
 } 
 
 void set_nome_passageiro(BILHETES b, char * s){
-	strcpy(b->nome_passageiro,s);
+	b->nome_passageiro = s;
 }
 
 void set_nif(BILHETES b, int x){
@@ -50,11 +44,11 @@ void set_nif(BILHETES b, int x){
 }
 
 void set_voo_ticket(BILHETES b, char * s){
-	strcpy(b->voo_ticket,s);
+	b->voo_ticket = s;
 }
 
 void set_lugar(BILHETES b, char * s){
-	strcpy(b->lugar,s);
+	b->lugar = s;
 }
 
 void set_preco(BILHETES b, float x){

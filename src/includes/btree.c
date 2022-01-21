@@ -2,6 +2,8 @@
 #include <stdlib.h>
 #include <stdbool.h>
 
+#include "define.h"
+
 typedef struct btree{
     int value[2];
     char * profit;

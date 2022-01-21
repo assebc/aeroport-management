@@ -1,6 +1,8 @@
 #ifndef TICKET_H
 #define TICKET_H
 
+#include "../define.h"
+
 typedef struct ticket *BILHETES;
 
 void * create_ticket();

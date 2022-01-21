@@ -3,13 +3,11 @@
 #include <string.h>
 #include <ctype.h>
 
+#include "define.h"
+
 #define __USE_XOPEN
 #include <time.h>
 
-#include "modules/avioes.h"
-#include "modules/aeroporto.h"
-#include "modules/voo.h"
-#include "modules/ticket.h"
 
 void sh (char *str){
 	char *p = str;

@@ -1,6 +1,8 @@
 #ifndef VOO_H
 #define VOO_H
 
+#include "../define.h"
+
 typedef struct voo *VOOS;
 
 void * create_voo();

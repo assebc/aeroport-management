@@ -3,6 +3,7 @@
 #include <string.h>
 #include <ctype.h>
 
+#include "../define.h"
 #include "aeroporto.h"
 #include "avioes.h"
 
@@ -18,8 +19,6 @@ struct voo {
 };
 
 typedef struct voo *VOOS;
-#define FLIGHT "../data/voos.csv"
-#define LINE_BUFFER 1024
 
 void * create_voo(){
 
@@ -33,11 +32,6 @@ void delete_voo(void * v){
 
 	VOOS vs = (VOOS) v;
 	vs->num_voo = 0;
-	free(vs->data_partida);
-	free(vs->data_chegada);
-	free(vs->aeroport_partida);
-	free(vs->aeroport_chegada);
-	free(vs->aviao_voo);
 	free(vs);
 
 } 
@@ -47,23 +41,23 @@ void set_num_voo(VOOS v, int x){
 }
 
 void set_data_partida(VOOS v, char * s){
-	strcpy(v->data_partida,s);
+	v->data_partida = s;
 }
 
 void set_data_chegada(VOOS v, char * s){
-	strcpy(v->data_chegada,s);
+	v->data_chegada = s;
 }
 
 void set_aeroport_partida(VOOS v, char * s){
-	strcpy(v->aeroport_partida,s);
+	v->aeroport_partida = s;
 }
 
 void set_aeroport_chegada(VOOS v, char * s){
-	strcpy(v->aeroport_chegada,s);
+	v->aeroport_chegada = s;
 }
 
 void set_aviao_voo(VOOS v, char * s){
-	strcpy(v->aviao_voo,s);
+	v->aviao_voo = s;
 }
 
 void set_voo(void * v, char * line){
